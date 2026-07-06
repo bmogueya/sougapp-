@@ -4,7 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
 import { Users } from './pages/Users';
 import { Merchants } from './pages/Merchants';
-import { Orders } from './pages/Orders';
+import Orders from './pages/Orders';
 import { Zones } from './pages/Zones';
 import { Settings } from './pages/Settings';
 import { ProtectedRoute } from './components/ProtectedRoute';

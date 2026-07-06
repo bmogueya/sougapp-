@@ -41,7 +41,7 @@ class MerchantProfileScreen extends ConsumerWidget {
             subtitle: const Text('Accepter de nouvelles commandes'),
             value: true,
             onChanged: (val) {},
-            activeColor: Colors.orange,
+            activeThumbColor: Colors.orange,
           ),
           const Divider(),
           ListTile(

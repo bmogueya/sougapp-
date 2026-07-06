@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/providers/auth_provider.dart';
@@ -9,6 +8,7 @@ import '../../features/customer/presentation/home/customer_home_screen.dart';
 import '../../features/customer/presentation/home/merchant_detail_screen.dart';
 import '../../features/customer/presentation/home/cart_screen.dart';
 import '../../features/customer/presentation/profile/customer_profile_screen.dart';
+import '../../features/driver/presentation/driver_main_layout.dart';
 import '../../features/driver/presentation/home/driver_home_screen.dart';
 import '../../features/driver/presentation/profile/driver_profile_screen.dart';
 import '../../features/merchant/presentation/merchant_main_layout.dart';

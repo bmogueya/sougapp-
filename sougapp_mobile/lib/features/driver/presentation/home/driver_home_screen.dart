@@ -31,7 +31,7 @@ class _DriverHomeScreenState extends ConsumerState<DriverHomeScreen> {
               ),
               Switch(
                 value: isOnline,
-                activeColor: Colors.green,
+                activeThumbColor: Colors.green,
                 onChanged: (val) {
                   setState(() {
                     isOnline = val;

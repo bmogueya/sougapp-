@@ -17,7 +17,8 @@ class SupabaseConfig {
   static Future<void> initialize() async {
     await Supabase.initialize(
       url: _supabaseUrl,
-      anonKey: _supabaseAnonKey,
+      // La clé "sb_publishable_..." est une clé publishable (remplace l'ancien anonKey).
+      publishableKey: _supabaseAnonKey,
     );
   }
 
