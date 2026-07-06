@@ -1,0 +1,15 @@
+{
+  "app_name": "سوق أب",
+  "home": "الرئيسية",
+  "search_hint": "عن ماذا تبحث؟",
+  "categories": "التصنيفات",
+  "nearby_merchants": "متاجر قريبة",
+  "profile": {
+    "title": "ملفي الشخصي",
+    "unknown_user": "مستخدم غير معروف",
+    "settings": "الإعدادات",
+    "help": "المساعدة والدعم",
+    "language": "تغيير اللغة",
+    "logout": "تسجيل الخروج"
+  }
+}

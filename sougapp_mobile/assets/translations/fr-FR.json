@@ -1,0 +1,15 @@
+{
+  "app_name": "SougApp",
+  "home": "Accueil",
+  "search_hint": "Que cherchez-vous ?",
+  "categories": "Catégories",
+  "nearby_merchants": "Marchands à proximité",
+  "profile": {
+    "title": "Mon Profil",
+    "unknown_user": "Utilisateur Inconnu",
+    "settings": "Paramètres",
+    "help": "Aide et Support",
+    "language": "Changer la langue",
+    "logout": "Se déconnecter"
+  }
+}

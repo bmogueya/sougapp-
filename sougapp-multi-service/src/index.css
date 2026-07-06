@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ * SougApp design tokens — "Desert Night"
+ * Mauritania's flag (green + gold star) reinterpreted as a refined
+ * command-center palette. Channels are space-separated RGB so Tailwind
+ * can apply `/ <alpha-value>`.
+ * ─────────────────────────────────────────────────────────────
+ */
+@layer base {
+  :root {
+    /* Light theme — warm paper */
+    --bg: 244 246 245;
+    --surface: 255 255 255;
+    --surface-2: 248 250 249;
+    --overlay: 255 255 255;
+    --border: 226 231 228;
+    --border-strong: 208 215 211;
+    --text: 14 29 24;
+    --muted: 92 110 104;
+    --faint: 140 156 150;
+
+    --primary: 14 124 102;
+    --primary-strong: 10 94 78;
+    --primary-foreground: 255 255 255;
+    --gold: 194 138 46;
+
+    --success: 22 143 74;
+    --warning: 194 138 46;
+    --danger: 208 56 61;
+    --info: 45 108 223;
+
+    /* Service accents */
+    --m-food: 213 108 47;
+    --m-grocery: 46 141 74;
+    --m-marketplace: 14 124 102;
+    --m-pharmacy: 208 56 61;
+    --m-parcel: 168 118 46;
+    --m-taxi: 194 138 46;
+    --m-wallet: 108 78 214;
+    --m-billing: 45 108 223;
+    --m-booking: 194 66 138;
+
+    color-scheme: light;
+  }
+
+  .dark {
+    /* Dark theme — desert night */
+    --bg: 9 20 17;
+    --surface: 15 30 26;
+    --surface-2: 21 41 37;
+    --overlay: 18 35 31;
+    --border: 32 53 47;
+    --border-strong: 45 71 63;
+    --text: 232 239 236;
+    --muted: 143 166 158;
+    --faint: 104 128 120;
+
+    --primary: 18 182 162;
+    --primary-strong: 20 154 137;
+    --primary-foreground: 4 20 16;
+    --gold: 224 169 59;
+
+    --success: 34 180 96;
+    --warning: 224 169 59;
+    --danger: 229 90 95;
+    --info: 96 150 246;
+
+    --m-food: 232 130 66;
+    --m-grocery: 52 176 100;
+    --m-marketplace: 18 182 162;
+    --m-pharmacy: 229 90 95;
+    --m-parcel: 208 152 74;
+    --m-taxi: 224 169 59;
+    --m-wallet: 138 110 246;
+    --m-billing: 96 150 246;
+    --m-booking: 224 96 168;
+
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    font-family: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+    font-feature-settings: "cv05" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Arabic gets its dedicated cut and a touch more line height */
+  :root[dir="rtl"] body {
+    font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+
+  /* Tabular numerals for all data/currency */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Visible, on-brand keyboard focus */
+  :focus-visible {
+    outline: 2px solid rgb(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: rgb(var(--primary) / 0.25);
+  }
+
+  /* Slim, themed scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--border-strong)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--border-strong));
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--faint));
+  }
+}
+
+@layer utilities {
+  /* Directional-safe fade for RTL page transitions */
+  .grid-dot {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgb(var(--border-strong) / 0.5) 1px,
+      transparent 0
+    );
+    background-size: 22px 22px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

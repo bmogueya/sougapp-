@@ -1,0 +1,15 @@
+{
+  "app_name": "SougApp",
+  "home": "Home",
+  "search_hint": "What are you looking for?",
+  "categories": "Categories",
+  "nearby_merchants": "Nearby merchants",
+  "profile": {
+    "title": "My Profile",
+    "unknown_user": "Unknown User",
+    "settings": "Settings",
+    "help": "Help & Support",
+    "language": "Change language",
+    "logout": "Log out"
+  }
+}
