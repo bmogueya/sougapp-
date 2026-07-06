@@ -69,31 +69,31 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Modifier la Zone">
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Nom de la Zone</label>
+          <label className="block text-sm font-medium text-text mb-1">Nom de la Zone</label>
           <input
             type="text"
             name="name"
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Statut</label>
+          <label className="block text-sm font-medium text-text mb-1">Statut</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none bg-white"
+            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -104,14 +104,14 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 text-muted hover:bg-surface-2 rounded-lg text-sm font-medium transition-colors"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary-strong transition-colors disabled:opacity-50"
           >
             {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
           </button>

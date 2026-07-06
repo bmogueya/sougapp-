@@ -48,8 +48,6 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
     setLoading(true);
     setError(null);
 
-    // Mettre à jour uniquement la table `profiles`
-    // Note : Modifier l'email ou le mot de passe nécessiterait d'utiliser l'API Admin de Supabase Auth
     const { error: updateError } = await supabase
       .from('profiles')
       .update({ 
@@ -75,7 +73,7 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Modifier l'Utilisateur">
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
           {error}
         </div>
       )}
@@ -83,36 +81,36 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Prénom</label>
+            <label className="block text-sm font-medium text-text mb-1">Prénom</label>
             <input
               type="text"
               name="firstName"
               required
               value={formData.firstName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Nom</label>
+            <label className="block text-sm font-medium text-text mb-1">Nom</label>
             <input
               type="text"
               name="lastName"
               required
               value={formData.lastName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Rôle</label>
+          <label className="block text-sm font-medium text-text mb-1">Rôle</label>
           <select
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none bg-white"
+            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           >
             <option value="customer">Client (Customer)</option>
             <option value="merchant">Marchand (Merchant)</option>
@@ -122,7 +120,7 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
           </select>
         </div>
         
-        <p className="text-xs text-slate-500 italic mt-2">
+        <p className="text-xs text-muted italic mt-2">
           Note: L'email et le mot de passe ne peuvent être modifiés que par l'utilisateur lui-même ou via l'interface complète d'administration Supabase.
         </p>
 
@@ -130,14 +128,14 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 text-muted hover:bg-surface-2 rounded-lg text-sm font-medium transition-colors"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary-strong transition-colors disabled:opacity-50"
           >
             {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
           </button>
