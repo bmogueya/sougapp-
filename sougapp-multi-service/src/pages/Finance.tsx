@@ -80,7 +80,7 @@ export function Finance() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
               <DollarSign size={24} />
@@ -96,7 +96,7 @@ export function Finance() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-emerald-100 p-3 rounded-lg text-emerald-600">
               <Wallet size={24} />
@@ -109,7 +109,7 @@ export function Finance() {
           <p className="text-sm text-slate-500">Total des revenus générés</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-orange-100 p-3 rounded-lg text-orange-600">
               <ArrowUpRight size={24} />
@@ -123,7 +123,7 @@ export function Finance() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-4 border-b border-slate-200 flex justify-between items-center">
           <h2 className="text-lg font-bold text-slate-900">Dernières Transactions</h2>
         </div>

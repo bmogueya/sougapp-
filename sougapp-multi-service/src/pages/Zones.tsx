@@ -55,7 +55,7 @@ export function Zones() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left rtl:text-right">
             <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">

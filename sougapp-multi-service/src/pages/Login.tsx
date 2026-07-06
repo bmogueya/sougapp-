@@ -29,7 +29,7 @@ export function Login() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-slate-100">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md border border-slate-100">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-slate-900">SougApp Admin</h1>
           <p className="text-slate-500 mt-2">Connectez-vous à votre compte</p>

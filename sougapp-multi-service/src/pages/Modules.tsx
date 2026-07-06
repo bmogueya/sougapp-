@@ -73,7 +73,7 @@ export function Modules() {
           {modules.map((module) => {
             const Icon = iconMap[module.icon_name] || Package;
             return (
-              <div key={module.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div key={module.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`p-3 rounded-lg ${module.theme_color} bg-opacity-10`}>

@@ -68,7 +68,7 @@ export function Settings() {
 
         {/* Contenu des paramètres */}
         <div className="md:col-span-3">
-          <form className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <form className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             
             <div className="p-6 border-b border-slate-100 space-y-4">
               <h2 className="text-lg font-bold text-slate-900">Paramètres de la Plateforme</h2>
