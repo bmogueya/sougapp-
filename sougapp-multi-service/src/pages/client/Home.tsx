@@ -25,19 +25,23 @@ export function ClientHome() {
     setLoading(false);
   };
 
+  const MODULE_STYLE = (id: string) => ({ color: `rgb(var(--m-${id}))` });
+  const MODULE_BG = (id: string) => ({ backgroundColor: `rgb(var(--m-${id}) / 0.12)` });
+
   const getModuleIcon = (moduleId: string) => {
+    const style = MODULE_STYLE(moduleId);
     switch (moduleId) {
-      case 'food': return <Utensils size={24} className="text-orange-500" />;
-      case 'pharmacy': return <Pill size={24} className="text-emerald-500" />;
-      case 'grocery': return <ShoppingBasket size={24} className="text-blue-500" />;
-      default: return <Store size={24} className="text-primary" />;
+      case 'food': return <Utensils size={24} style={style} />;
+      case 'pharmacy': return <Pill size={24} style={style} />;
+      case 'grocery': return <ShoppingBasket size={24} style={style} />;
+      default: return <Store size={24} style={style} />;
     }
   };
 
   const CATEGORIES = [
-    { id: 'food', name: 'Restaurants', color: 'bg-orange-100', icon: 'food' },
-    { id: 'pharmacy', name: 'Pharmacies', color: 'bg-emerald-100', icon: 'pharmacy' },
-    { id: 'grocery', name: 'Supermarchés', color: 'bg-blue-100', icon: 'grocery' },
+    { id: 'food', name: 'Restaurants', icon: 'food' },
+    { id: 'pharmacy', name: 'Pharmacies', icon: 'pharmacy' },
+    { id: 'grocery', name: 'Supermarchés', icon: 'grocery' },
   ];
 
   return (
@@ -59,7 +63,7 @@ export function ClientHome() {
         <div className="grid grid-cols-3 gap-3">
           {CATEGORIES.map(cat => (
             <Link key={cat.id} to={`/app/search?module=${cat.id}`} className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-surface shadow-sm active:scale-95 transition-transform">
-              <div className={`w-12 h-12 rounded-full ${cat.color} flex items-center justify-center`}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={MODULE_BG(cat.id)}>
                 {getModuleIcon(cat.icon)}
               </div>
               <span className="text-xs font-semibold text-text text-center">{cat.name}</span>
@@ -96,7 +100,7 @@ export function ClientHome() {
                 to={`/app/store/${store.id}`}
                 className="flex items-center gap-4 bg-surface p-3 rounded-2xl shadow-sm border border-border active:scale-[0.98] transition-transform"
               >
-                <div className="w-16 h-16 rounded-xl bg-surface-2 flex items-center justify-center text-muted shrink-0">
+                <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0" style={MODULE_BG(store.module_id)}>
                   {getModuleIcon(store.module_id)}
                 </div>
                 <div className="flex-1 min-w-0">

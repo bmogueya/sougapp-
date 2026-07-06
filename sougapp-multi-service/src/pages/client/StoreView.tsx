@@ -147,7 +147,7 @@ export function ClientStoreView() {
                   )}
                 </div>
                 {/* Note: The cart logic will be connected later */}
-                <button className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-white font-medium py-1.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-1">
+                <button className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-medium py-1.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-1">
                   <Plus size={16} /> Ajouter
                 </button>
               </div>
