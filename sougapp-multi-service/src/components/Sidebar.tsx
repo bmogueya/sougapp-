@@ -20,8 +20,8 @@ export function Sidebar() {
   const { pathname } = useLocation();
 
   return (
-    <aside className="w-64 bg-slate-900 text-white flex flex-col h-screen fixed top-0 rtl:right-0 ltr:left-0">
-      <div className="h-16 flex items-center justify-center border-b border-slate-800">
+    <aside className="w-64 bg-primary text-primary-foreground flex flex-col h-screen fixed top-0 rtl:right-0 ltr:left-0">
+      <div className="h-16 flex items-center justify-center border-b border-primary-strong/30">
         <h1 className="text-xl font-bold">SougApp Admin</h1>
       </div>
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -34,8 +34,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary text-white"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white",
+                  ? "bg-primary-foreground/15 text-primary-foreground"
+                  : "text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground",
               )}
             >
               <Icon size={20} />

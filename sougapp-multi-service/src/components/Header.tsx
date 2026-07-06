@@ -17,16 +17,16 @@ export function Header() {
   }, [i18n.language]);
 
   return (
-    <header className="h-16 bg-white border-b flex items-center justify-between px-6 sticky top-0 z-10 rtl:pr-72 ltr:pl-72">
-      <div className="font-semibold text-gray-700">
+    <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 sticky top-0 z-10 rtl:pr-72 ltr:pl-72">
+      <div className="font-semibold text-text">
         Super Admin Panel
       </div>
       
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
-          <Globe size={18} className="text-gray-500" />
+          <Globe size={18} className="text-muted" />
           <select 
-            className="border-none bg-transparent text-sm focus:ring-0 cursor-pointer"
+            className="border-none bg-transparent text-sm text-text focus:ring-0 cursor-pointer"
             value={i18n.language}
             onChange={(e) => changeLanguage(e.target.value)}
           >
@@ -38,7 +38,7 @@ export function Header() {
         
         <button 
           onClick={signOut}
-          className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium"
+          className="flex items-center gap-2 text-danger hover:text-danger text-sm font-medium"
         >
           <LogOut size={18} />
           <span>{t('logout')}</span>
