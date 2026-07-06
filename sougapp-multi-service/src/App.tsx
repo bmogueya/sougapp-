@@ -1,17 +1,19 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { SuperAdminLayout } from './layouts/SuperAdminLayout';
-import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
-import { Users } from './pages/Users';
-import { Merchants } from './pages/Merchants';
-import Orders from './pages/Orders';
-import { Zones } from './pages/Zones';
-import { Settings } from './pages/Settings';
-import { Modules } from './pages/Modules';
-import { Drivers } from './pages/Drivers';
-import { Finance } from './pages/Finance';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
+
+const SuperAdminLayout = lazy(() => import('./layouts/SuperAdminLayout').then(m => ({ default: m.SuperAdminLayout })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const Users = lazy(() => import('./pages/Users').then(m => ({ default: m.Users })));
+const Merchants = lazy(() => import('./pages/Merchants').then(m => ({ default: m.Merchants })));
+const Orders = lazy(() => import('./pages/Orders'));
+const Zones = lazy(() => import('./pages/Zones').then(m => ({ default: m.Zones })));
+const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })));
+const Modules = lazy(() => import('./pages/Modules').then(m => ({ default: m.Modules })));
+const Drivers = lazy(() => import('./pages/Drivers').then(m => ({ default: m.Drivers })));
+const Finance = lazy(() => import('./pages/Finance').then(m => ({ default: m.Finance })));
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
           
           {/* Routes protégées */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<SuperAdminLayout />}>
+            <Route path="/" element={<Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}><SuperAdminLayout /></Suspense>}>
               <Route index element={<Dashboard />} />
               <Route path="users" element={<Users />} />
               <Route path="drivers" element={<Drivers />} />
