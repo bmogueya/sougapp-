@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -16,6 +16,8 @@ interface Location {
   latitude: number;
   longitude: number;
   description?: string;
+  color?: string;
+  pulse?: boolean;
 }
 
 interface MapComponentProps {
@@ -27,7 +29,7 @@ interface MapComponentProps {
 
 export function MapComponent({ 
   locations = [], 
-  center = [18.0735, -15.9582], // Default: Nouakchott 
+  center = [18.0735, -15.9582],
   zoom = 12,
   className = "h-[400px] w-full rounded-xl z-0" 
 }: MapComponentProps) {
@@ -45,14 +47,28 @@ export function MapComponent({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {locations.map((loc) => (
-          <Marker key={loc.id} position={[loc.latitude, loc.longitude]}>
-            <Popup>
-              <strong>{loc.name}</strong>
-              {loc.description && <p className="text-sm text-muted mt-1">{loc.description}</p>}
-            </Popup>
-          </Marker>
-        ))}
+        {locations.map((loc) =>
+          loc.color ? (
+            <CircleMarker
+              key={loc.id}
+              center={[loc.latitude, loc.longitude]}
+              radius={10}
+              pathOptions={{ color: loc.color, fillColor: loc.color, fillOpacity: 0.25, weight: 2 }}
+            >
+              <Popup>
+                <strong>{loc.name}</strong>
+                {loc.description && <p className="text-sm text-muted mt-1">{loc.description}</p>}
+              </Popup>
+            </CircleMarker>
+          ) : (
+            <Marker key={loc.id} position={[loc.latitude, loc.longitude]}>
+              <Popup>
+                <strong>{loc.name}</strong>
+                {loc.description && <p className="text-sm text-muted mt-1">{loc.description}</p>}
+              </Popup>
+            </Marker>
+          )
+        )}
       </MapContainer>
     </div>
   );
