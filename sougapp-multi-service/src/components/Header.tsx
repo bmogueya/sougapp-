@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { Globe, LogOut } from 'lucide-react';
+import { Globe, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
 
@@ -17,9 +21,18 @@ export function Header() {
   }, [i18n.language]);
 
   return (
-    <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 sticky top-0 z-10 rtl:pr-72 ltr:pl-72">
-      <div className="font-semibold text-text">
-        Super Admin Panel
+    <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 sticky top-0 z-10">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 rounded-lg text-muted hover:text-text hover:bg-surface-2 transition-colors"
+          aria-label="Menu"
+        >
+          <Menu size={20} />
+        </button>
+        <div className="font-semibold text-text">
+          Super Admin Panel
+        </div>
       </div>
       
       <div className="flex items-center gap-6">
