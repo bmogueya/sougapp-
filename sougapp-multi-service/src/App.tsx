@@ -7,6 +7,9 @@ import { Merchants } from './pages/Merchants';
 import Orders from './pages/Orders';
 import { Zones } from './pages/Zones';
 import { Settings } from './pages/Settings';
+import { Modules } from './pages/Modules';
+import { Drivers } from './pages/Drivers';
+import { Finance } from './pages/Finance';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -22,9 +25,12 @@ function App() {
             <Route path="/" element={<SuperAdminLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="users" element={<Users />} />
+              <Route path="drivers" element={<Drivers />} />
               <Route path="merchants" element={<Merchants />} />
               <Route path="orders" element={<Orders />} />
               <Route path="zones" element={<Zones />} />
+              <Route path="modules" element={<Modules />} />
+              <Route path="finance" element={<Finance />} />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
