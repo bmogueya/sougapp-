@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 import { SuperAdminLayout } from './layouts/SuperAdminLayout';
 import { MerchantLayout } from './layouts/MerchantLayout';
@@ -24,47 +24,116 @@ const MerchantOrders = lazy(() => import('./pages/merchant/Orders').then(m => ({
 const MerchantCategories = lazy(() => import('./pages/merchant/Categories').then(m => ({ default: m.MerchantCategories })));
 const MerchantSettings = lazy(() => import('./pages/merchant/Settings').then(m => ({ default: m.MerchantSettings })));
 
+// ... imports existants
+const ClientLayout = lazy(() => import('./layouts/ClientLayout').then(m => ({ default: m.ClientLayout })));
+const ClientHome = lazy(() => import('./pages/client/Home').then(m => ({ default: m.ClientHome })));
+const ClientStoreView = lazy(() => import('./pages/client/StoreView').then(m => ({ default: m.ClientStoreView })));
+const ClientCart = lazy(() => import('./pages/client/Cart').then(m => ({ default: m.ClientCart })));
+const ClientSearch = lazy(() => import('./pages/client/Search').then(m => ({ default: m.ClientSearch })));
+const ClientProfile = lazy(() => import('./pages/client/Profile').then(m => ({ default: m.ClientProfile })));
+
+const DriverLayout = lazy(() => import('./layouts/DriverLayout').then(m => ({ default: m.DriverLayout })));
+const DriverDashboard = lazy(() => import('./pages/driver/Dashboard').then(m => ({ default: m.DriverDashboard })));
+const DriverHistory = lazy(() => import('./pages/driver/History').then(m => ({ default: m.DriverHistory })));
+const DriverProfile = lazy(() => import('./pages/driver/Profile').then(m => ({ default: m.DriverProfile })));
+
 function App() {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // Si l'utilisateur est connecté et essaie d'accéder à /login, on le redirige selon son rôle
+  if (user && location.pathname === '/login') {
+    if (user.role === 'super_admin') return <Navigate to="/" replace />;
+    if (user.role === 'merchant') return <Navigate to="/merchant" replace />;
+    if (user.role === 'customer') return <Navigate to="/app" replace />;
+    if (user.role === 'driver') return <Navigate to="/driver" replace />;
+  }
+
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        
+        {/* Routes Client (End User) */}
+        <Route path="/app" element={
+          <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+            <ClientLayout />
+          </Suspense>
+        }>
+          <Route index element={<ClientHome />} />
+          <Route path="search" element={<ClientSearch />} />
+          <Route path="store/:id" element={<ClientStoreView />} />
+          <Route path="cart" element={<ClientCart />} />
+          <Route path="profile" element={<ClientProfile />} />
+          <Route path="*" element={<ClientHome />} />
+        </Route>
+
+        {/* Routes protégées - Super Admin */}
+        <Route element={<ProtectedRoute allowedRoles={['super_admin', 'dispatcher']} />}>
+          <Route path="/" element={<SuperAdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="drivers" element={<Drivers />} />
+            <Route path="merchants" element={<Merchants />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="dispatch" element={<Dispatch />} />
+            <Route path="promotions" element={<Promotions />} />
+            <Route path="zones" element={<Zones />} />
+            <Route path="modules" element={<Modules />} />
+            <Route path="finance" element={<Finance />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Route>
+
+        {/* Routes protégées - Merchant */}
+        <Route element={<ProtectedRoute allowedRoles={['merchant']} />}>
+          <Route path="/merchant" element={<MerchantLayout />}>
+            <Route index element={<MerchantDashboard />} />
+            <Route path="products" element={<MerchantProducts />} />
+            <Route path="categories" element={<MerchantCategories />} />
+            <Route path="orders" element={<MerchantOrders />} />
+            <Route path="settings" element={<MerchantSettings />} />
+          </Route>
+        </Route>
+
+        {/* Routes protégées - Driver */}
+        <Route element={<ProtectedRoute allowedRoles={['driver']} />}>
+          <Route path="/driver" element={
+            <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+              <DriverLayout />
+            </Suspense>
+          }>
+            <Route index element={<DriverDashboard />} />
+            <Route path="history" element={<DriverHistory />} />
+            <Route path="profile" element={<DriverProfile />} />
+          </Route>
+        </Route>
+        
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default function Root() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          
-          {/* Routes protégées - Super Admin */}
-          <Route element={<ProtectedRoute allowedRoles={['super_admin', 'dispatcher']} />}>
-            <Route path="/" element={<Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}><SuperAdminLayout /></Suspense>}>
-              <Route index element={<Dashboard />} />
-              <Route path="users" element={<Users />} />
-              <Route path="drivers" element={<Drivers />} />
-              <Route path="merchants" element={<Merchants />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="dispatch" element={<Dispatch />} />
-              <Route path="promotions" element={<Promotions />} />
-              <Route path="zones" element={<Zones />} />
-              <Route path="modules" element={<Modules />} />
-              <Route path="finance" element={<Finance />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-          </Route>
-
-          {/* Routes protégées - Merchant */}
-          <Route element={<ProtectedRoute allowedRoles={['merchant']} />}>
-            <Route path="/merchant" element={<Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}><MerchantLayout /></Suspense>}>
-              <Route index element={<MerchantDashboard />} />
-              <Route path="products" element={<MerchantProducts />} />
-              <Route path="categories" element={<MerchantCategories />} />
-              <Route path="orders" element={<MerchantOrders />} />
-              <Route path="settings" element={<MerchantSettings />} />
-            </Route>
-          </Route>
-          
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <App />
       </BrowserRouter>
     </AuthProvider>
   );
 }
-
-export default App;

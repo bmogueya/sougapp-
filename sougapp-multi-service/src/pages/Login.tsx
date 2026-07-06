@@ -132,7 +132,7 @@ export function Login() {
               <path d="M55 52 L58 46 L62 52 L69 53 L63 58 L65 65 L58 61 L51 65 L53 58 L47 53 L55 52Z" fill="#C28A2E"/>
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-text">SougApp Admin</h1>
+          <h1 className="text-2xl font-bold text-text">SougApp</h1>
           <p className="text-muted mt-2">Connectez-vous à votre compte</p>
         </div>
 

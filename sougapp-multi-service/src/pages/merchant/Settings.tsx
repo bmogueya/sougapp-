@@ -15,7 +15,7 @@ export function MerchantSettings() {
     closing: "22:00",
   });
   const [saved, setSaved] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   useEffect(() => {
     if (session?.user.id) fetchStore();

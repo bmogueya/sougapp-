@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Search, UserPlus, MapPin, CheckCircle2, XCircle, Car } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -14,7 +13,6 @@ interface Driver {
 }
 
 export function Drivers() {
-  const { t } = useTranslation();
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,15 +29,8 @@ export function Drivers() {
       .eq('role', 'driver')
       .order('created_at', { ascending: false });
 
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       setDrivers(data as any[]);
-    } else {
-      // Mock data if no drivers exist
-      setDrivers([
-        { id: '1', first_name: 'Amadou', last_name: 'Ba', phone: '+222 45 00 11 22', status: 'active', zone_id: 1, created_at: new Date().toISOString() },
-        { id: '2', first_name: 'Ousmane', last_name: 'Sow', phone: '+222 45 00 33 44', status: 'inactive', zone_id: 1, created_at: new Date().toISOString() },
-        { id: '3', first_name: 'Cheikh', last_name: 'Fall', phone: '+222 45 00 55 66', status: 'active', zone_id: 2, created_at: new Date().toISOString() },
-      ]);
     }
     setLoading(false);
   };

@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { formatMRU, cn } from "@/lib/utils";
+import { formatMRU } from '../../lib/utils';
 
 const RECENT = [
   { id: "ORS-48213", customer: "Aïcha mint Ahmed", amount: 1450, status: "delivered" as const, items: 3, time: "il y a 3 min" },

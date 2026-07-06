@@ -1,22 +1,14 @@
-import { useState, useMemo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useMemo, useEffect } from "react";
 import {
-  Map,
   Crosshair,
-  Users,
   Activity,
-  Filter,
-  Navigation,
 } from "lucide-react";
 import { MapComponent } from "@/components/MapComponent";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Sparkline } from "@/components/ui/Sparkline";
 import { formatMRU, cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
-/* ─────────────────────────────────────────────────────────────
- * Nouakchott district coordinates (approximate centroids)
- * ───────────────────────────────────────────────────────────── */
 const DISTRICT_COORDS: Record<string, [number, number]> = {
   "Tevragh Zeina": [18.085, -15.983],
   Ksar: [18.095, -15.950],
@@ -28,10 +20,11 @@ const DISTRICT_COORDS: Record<string, [number, number]> = {
   "El Mina": [18.020, -15.980],
 };
 
+// Fallback coordinate if address not recognized
 const NOUAKCHOTT: [number, number] = [18.0735, -15.9582];
 const ZOOM = 13;
 
-type OrderStatus = "pending" | "preparing" | "ready";
+type OrderStatus = "pending" | "preparing" | "ready_for_delivery";
 
 interface DispatchOrder {
   id: string;
@@ -50,39 +43,74 @@ interface DispatchDriver {
   rating: number;
 }
 
-const INITIAL_ORDERS: DispatchOrder[] = [
-  { id: "ORD-5412", status: "pending", name: "Burger King", type: "food", district: "Tevragh Zeina", amount: 1450 },
-  { id: "ORD-5413", status: "preparing", name: "Pizza Hot", type: "food", district: "Ksar", amount: 3200 },
-  { id: "ORD-5414", status: "ready", name: "KFC", type: "food", district: "Arafat", amount: 2150 },
-  { id: "ORD-5415", status: "pending", name: "Pharmacie El Wahda", type: "pharmacy", district: "Dar Naïm", amount: 980 },
-  { id: "ORD-5416", status: "pending", name: "Marché Toujounine", type: "grocery", district: "Toujounine", amount: 4560 },
-];
-
-const INITIAL_DRIVERS: DispatchDriver[] = [
-  { id: "DRV-001", name: "Amadou Ba", status: "idle", district: "Tevragh Zeina", rating: 4.8 },
-  { id: "DRV-002", name: "Ousmane Diallo", status: "busy", district: "Ksar", rating: 4.5 },
-  { id: "DRV-003", name: "Cheikh Vall", status: "idle", district: "Arafat", rating: 4.9 },
-  { id: "DRV-004", name: "Demba Ba", status: "idle", district: "Dar Naïm", rating: 4.6 },
-  { id: "DRV-005", name: "Moussa Doucouré", status: "busy", district: "Sebkha", rating: 4.7 },
-];
-
 const STATUS_TONE: Record<OrderStatus, "neutral" | "warning" | "info"> = {
   pending: "neutral",
   preparing: "warning",
-  ready: "info",
-};
-
-const ASSIGNED_ORDERS: Record<string, string> = {
-  "ORS-5413": "DRV-002",
-  "ORD-5414": "DRV-005",
+  ready_for_delivery: "info",
 };
 
 export function Dispatch() {
-  const { t } = useTranslation();
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
-  const [drivers, setDrivers] = useState(INITIAL_DRIVERS);
+  const [orders, setOrders] = useState<DispatchOrder[]>([]);
+  const [drivers, setDrivers] = useState<DispatchDriver[]>([]);
   const [filterStatus, setFilterStatus] = useState<OrderStatus | "all">("all");
   const [autoDispatch, setAutoDispatch] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    // Only fetch orders that are not yet delivered/cancelled
+    const { data } = await supabase
+      .from('orders')
+      .select('*, stores(name, address)')
+      .in('status', ['pending', 'preparing', 'ready_for_delivery']);
+      
+    if (data) {
+      const formatted = data.map((o: any) => ({
+        id: o.id,
+        status: o.status,
+        name: o.stores?.name || 'Inconnu',
+        type: 'food',
+        district: o.delivery_address || 'Tevragh Zeina', // Fallback district for map
+        amount: o.total_amount
+      }));
+      setOrders(formatted);
+    }
+  };
+
+  const fetchDrivers = async () => {
+    // Fetch all drivers
+    const { data } = await supabase
+      .from('profiles')
+      .select('id, first_name, last_name')
+      .eq('role', 'driver');
+      
+    if (data) {
+      // In a real app, we would query their active status and current location.
+      const formatted = data.map((d: any) => ({
+        id: d.id,
+        name: `${d.first_name} ${d.last_name}`,
+        status: "idle" as const,
+        district: "Tevragh Zeina",
+        rating: 5.0
+      }));
+      setDrivers(formatted);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([fetchOrders(), fetchDrivers()]).then(() => setLoading(false));
+
+    // Realtime subscription
+    const channel = supabase.channel('dispatch-updates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+        fetchOrders();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const filteredOrders = useMemo(
     () =>
@@ -92,17 +120,26 @@ export function Dispatch() {
     [orders, filterStatus],
   );
 
-  const assignOrder = useCallback((orderId: string) => {
-    const idle = INITIAL_DRIVERS.find((d) => d.status === "idle" && !ASSIGNED_ORDERS[orderId]);
-    if (!idle) return;
-    ASSIGNED_ORDERS[orderId] = idle.id;
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: "ready" as const } : o)),
-    );
-    setDrivers((prev) =>
-      prev.map((d) => (d.id === idle.id ? { ...d, status: "busy" as const } : d)),
-    );
-  }, []);
+  const assignOrder = async (orderId: string) => {
+    const idleDriver = drivers.find((d) => d.status === "idle");
+    if (!idleDriver) {
+      alert("Aucun livreur disponible !");
+      return;
+    }
+
+    // Assign in DB
+    const { error } = await supabase
+      .from('orders')
+      .update({ driver_id: idleDriver.id, status: 'delivering' })
+      .eq('id', orderId);
+
+    if (error) {
+      alert("Erreur lors de l'assignation: " + error.message);
+    } else {
+      // Optimistic update
+      fetchOrders();
+    }
+  };
 
   const mapLocations = useMemo(() => {
     const locs: {
@@ -115,27 +152,28 @@ export function Dispatch() {
     }[] = [];
 
     drivers.forEach((d) => {
-      const coords = DISTRICT_COORDS[d.district];
-      if (!coords) return;
+      // Simple exact match logic or fallback
+      let coords = DISTRICT_COORDS[d.district];
+      if (!coords) coords = NOUAKCHOTT;
+      
       locs.push({
         id: d.id,
         name: d.name,
-        latitude: coords[0],
-        longitude: coords[1],
-        description: `${d.district} · ${d.status === "idle" ? "Disponible" : "En course"} · ★ ${d.rating}`,
+        latitude: coords[0] + (Math.random() * 0.01 - 0.005),
+        longitude: coords[1] + (Math.random() * 0.01 - 0.005),
+        description: `${d.district} · ${d.status === "idle" ? "Disponible" : "En course"} · ★ ${d.rating.toFixed(1)}`,
         color: d.status === "idle" ? "#22c55e" : "#f97316",
       });
     });
 
     filteredOrders.forEach((o) => {
-      const coords = DISTRICT_COORDS[o.district];
-      if (!coords) return;
+      let coords = DISTRICT_COORDS[o.district] || NOUAKCHOTT;
       locs.push({
         id: o.id,
         name: o.name,
         latitude: coords[0] + 0.004,
         longitude: coords[1] + 0.004,
-        description: `${o.id} · ${formatMRU(o.amount, "fr", { compact: true })} · ${o.district}`,
+        description: `${o.id.substring(0, 8)} · ${formatMRU(o.amount, "fr", { compact: true })} · ${o.district}`,
         color: "#ef4444",
       });
     });
@@ -157,13 +195,9 @@ export function Dispatch() {
         </div>
         <div className="flex gap-2">
           <div className="flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-muted shadow-card">
-            <span className="h-2 w-2 rounded-full bg-success" />
+            <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
             {idleCount} disponible{idleCount > 1 ? "s" : ""}
           </div>
-          <button className="flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text shadow-card transition-colors hover:bg-surface-2">
-            <Filter size={14} />
-            Filtrer
-          </button>
           <button
             onClick={() => setAutoDispatch(!autoDispatch)}
             className={cn(
@@ -184,12 +218,12 @@ export function Dispatch() {
         {[
           { label: "En attente", value: orders.filter((o) => o.status === "pending").length, accent: "text-warning" },
           { label: "En préparation", value: orders.filter((o) => o.status === "preparing").length, accent: "text-info" },
-          { label: "Prêts", value: orders.filter((o) => o.status === "ready").length, accent: "text-success" },
+          { label: "Prêts à livrer", value: orders.filter((o) => o.status === "ready_for_delivery").length, accent: "text-success" },
           { label: "Livreurs occupés", value: drivers.filter((d) => d.status === "busy").length, accent: "text-danger" },
         ].map((kpi) => (
           <Card key={kpi.label} className="flex items-center gap-3 px-5 py-4">
             <span className={cn("font-mono text-2xl font-bold tabular-nums", kpi.accent)}>
-              {kpi.value}
+              {loading ? "-" : kpi.value}
             </span>
             <span className="text-xs text-muted">{kpi.label}</span>
           </Card>
@@ -206,7 +240,7 @@ export function Dispatch() {
               À dispatcher ({filteredOrders.length})
             </h2>
             <div className="flex gap-1">
-              {(["all", "pending", "preparing", "ready"] as const).map((s) => (
+              {(["all", "pending", "preparing", "ready_for_delivery"] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => setFilterStatus(s)}
@@ -224,7 +258,9 @@ export function Dispatch() {
           </div>
 
           <ul className="flex-1 divide-y divide-border overflow-y-auto">
-            {filteredOrders.map((order) => (
+            {loading ? (
+              <li className="p-8 text-center text-muted">Chargement...</li>
+            ) : filteredOrders.map((order) => (
               <li
                 key={order.id}
                 className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-surface-2"
@@ -234,14 +270,14 @@ export function Dispatch() {
                     "mt-0.5 h-2 w-2 shrink-0 rounded-full",
                     order.status === "pending" && "bg-warning",
                     order.status === "preparing" && "bg-info",
-                    order.status === "ready" && "bg-success",
+                    order.status === "ready_for_delivery" && "bg-success animate-pulse",
                   )}
                   aria-hidden
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs font-semibold text-muted">
-                      {order.id}
+                      {order.id.substring(0, 8)}
                     </span>
                     <Badge tone={STATUS_TONE[order.status]}>
                       {order.status === "pending" ? "Attente" : order.status === "preparing" ? "Prép." : "Prêt"}
@@ -251,32 +287,32 @@ export function Dispatch() {
                     {order.name}
                   </p>
                   <div className="flex items-center gap-3 text-[11px] text-muted">
-                    <span>{order.district}</span>
+                    <span className="truncate">{order.district}</span>
                     <span>{formatMRU(order.amount, "fr", { compact: true })}</span>
                   </div>
                   <button
                     onClick={() => assignOrder(order.id)}
-                    disabled={order.status !== "pending" || idleCount === 0}
+                    disabled={order.status !== "ready_for_delivery" || idleCount === 0}
                     className={cn(
                       "mt-2 w-full rounded-lg py-1.5 text-xs font-medium transition-colors",
-                      order.status === "pending" && idleCount > 0
-                        ? "bg-primary text-primary-foreground hover:bg-primary-strong"
+                      order.status === "ready_for_delivery" && idleCount > 0
+                        ? "bg-primary text-primary-foreground hover:bg-primary-strong shadow-sm"
                         : "cursor-not-allowed bg-surface-2 text-faint",
                     )}
                   >
-                    {order.status === "pending"
+                    {order.status === "ready_for_delivery"
                       ? idleCount > 0
-                        ? "Assigner un livreur"
+                        ? "Assigner un livreur (Force Dispatch)"
                         : "Aucun livreur dispo"
-                      : "Déjà assignée"}
+                      : "En attente du marchand"}
                   </button>
                 </div>
               </li>
             ))}
-            {filteredOrders.length === 0 && (
+            {!loading && filteredOrders.length === 0 && (
               <li className="flex flex-col items-center justify-center gap-2 px-5 py-12 text-muted">
                 <Crosshair size={24} className="text-faint" />
-                <p className="text-sm">Aucune commande à afficher</p>
+                <p className="text-sm">Aucune commande en cours</p>
               </li>
             )}
           </ul>
@@ -304,7 +340,7 @@ export function Dispatch() {
               Points de livraison
             </span>
             <span className="ml-auto text-[11px] text-faint">
-              Carte OpenStreetMap · Nouakchott
+              Carte Leaflet · Temps réel
             </span>
           </div>
         </div>

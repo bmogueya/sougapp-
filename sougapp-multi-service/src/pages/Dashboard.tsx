@@ -92,8 +92,8 @@ export function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <PaymentPanel data={paymentData} lang={lang} />
-        <CityPanel data={cityData} lang={lang} />
+        <PaymentPanel data={paymentData} />
+        <CityPanel data={cityData} />
         <ModuleComparisonPanel data={moduleCompareData} lang={lang} />
       </div>
     </div>
@@ -548,10 +548,8 @@ function FluxPanel({
  * ───────────────────────────────────────────────────────────── */
 function PaymentPanel({
   data,
-  lang,
 }: {
   data: { method: string; orders: number }[];
-  lang: string;
 }) {
   const { t } = useTranslation();
   return (
@@ -582,10 +580,8 @@ function PaymentPanel({
  * ───────────────────────────────────────────────────────────── */
 function CityPanel({
   data,
-  lang,
 }: {
   data: { city: string; orders: number }[];
-  lang: string;
 }) {
   const { t } = useTranslation();
   return (
@@ -635,8 +631,8 @@ function ModuleComparisonPanel({
           const accent = `rgb(var(--m-${mod.name}))`;
           return (
             <li key={mod.name} className="flex items-center gap-3 px-5 py-2.5 transition-colors hover:bg-surface-2">
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg" style={{ backgroundColor: `rgb(var(--m-${mod.name}) / 0.12)` }}>
-                <mod.icon className="h-4 w-4" style={{ color: accent }} />
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg" style={{ backgroundColor: `rgb(var(--m-${mod.name}) / 0.12)`, color: accent }}>
+                <mod.icon className="h-4 w-4" />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium text-text">

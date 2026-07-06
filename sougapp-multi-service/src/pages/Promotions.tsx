@@ -437,7 +437,7 @@ function BannerModal({
             className="w-full rounded-xl bg-bg border border-border px-3 py-2.5 text-sm text-text focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
           >
             <option value="">Tous les modules (Global)</option>
-            {Object.entries(MODULE_MAP).map(([key, mod]) => (
+            {Object.keys(MODULE_MAP).map((key) => (
               <option key={key} value={key}>
                 {t(`modules.${key}`)}
               </option>
@@ -479,7 +479,7 @@ function CouponModal({
   onSave: (form: any) => void;
   initial: Coupon | null;
 }) {
-  const [form, setForm] = useState(initial ?? { ...EMPTY_COUPON });
+  const [form, setForm] = useState<any>(initial ?? { ...EMPTY_COUPON });
 
   useEffect(() => {
     setForm(initial ?? { ...EMPTY_COUPON });
