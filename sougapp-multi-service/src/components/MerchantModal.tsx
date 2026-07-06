@@ -75,7 +75,7 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           />
         </div>
 
@@ -86,7 +86,7 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
             rows={3}
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           />
         </div>
 
@@ -97,7 +97,7 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           />
         </div>
 
@@ -107,7 +107,7 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none bg-white"
           >
             <option value="pending">En attente (Pending)</option>
             <option value="active">Actif</option>

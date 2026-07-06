@@ -83,7 +83,7 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
           />
         </div>
 
@@ -93,7 +93,7 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none bg-white"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>

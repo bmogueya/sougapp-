@@ -90,7 +90,7 @@ export function Settings() {
                       name="siteName"
                       value={config.siteName}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
                     />
                   </div>
                   <div>
@@ -100,7 +100,7 @@ export function Settings() {
                       name="contactEmail"
                       value={config.contactEmail}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
                     />
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export function Settings() {
                       name="commissionRate"
                       value={config.commissionRate}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
                     />
                   </div>
                   <div>
@@ -129,7 +129,7 @@ export function Settings() {
                       name="deliveryFeeBase"
                       value={config.deliveryFeeBase}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
                     />
                   </div>
                 </div>
