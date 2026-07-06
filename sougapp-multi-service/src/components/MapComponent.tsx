@@ -33,7 +33,7 @@ export function MapComponent({
 }: MapComponentProps) {
   
   return (
-    <div className={`overflow-hidden border border-slate-200 shadow-sm relative ${className}`}>
+    <div className={`overflow-hidden border border-border shadow-card relative ${className}`}>
       <MapContainer 
         center={center} 
         zoom={zoom} 
@@ -49,7 +49,7 @@ export function MapComponent({
           <Marker key={loc.id} position={[loc.latitude, loc.longitude]}>
             <Popup>
               <strong>{loc.name}</strong>
-              {loc.description && <p className="text-sm text-slate-500 mt-1">{loc.description}</p>}
+              {loc.description && <p className="text-sm text-muted mt-1">{loc.description}</p>}
             </Popup>
           </Marker>
         ))}
