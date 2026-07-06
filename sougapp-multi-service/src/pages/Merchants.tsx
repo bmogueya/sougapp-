@@ -55,33 +55,33 @@ export function Merchants() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold text-slate-900">{t('merchants')}</h1>
+        <h1 className="text-2xl font-bold text-text">{t('merchants')}</h1>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+          className="bg-primary hover:bg-primary-strong text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
         >
           <Plus size={16} />
           Nouveau Marchand
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-200">
+      <div className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+        <div className="p-4 border-b border-border">
           <div className="relative max-w-sm">
-            <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-faint" size={18} />
             <input 
               type="text" 
               placeholder="Rechercher un marchand..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+              className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left rtl:text-right">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+            <thead className="bg-surface-2 text-muted font-medium border-b border-border">
               <tr>
                 <th className="px-6 py-4">Nom de la boutique</th>
                 <th className="px-6 py-4">Zone / Adresse</th>
@@ -92,38 +92,38 @@ export function Merchants() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={4} className="px-6 py-8 text-center text-muted">
                     Chargement...
                   </td>
                 </tr>
               ) : filteredMerchants.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={4} className="px-6 py-8 text-center text-muted">
                     Aucun marchand trouvé.
                   </td>
                 </tr>
               ) : (
                 filteredMerchants.map((merchant) => (
-                  <tr key={merchant.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  <tr key={merchant.id} className="border-b border-border hover:bg-surface-2 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                        <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-faint">
                           <Store size={18} />
                         </div>
                         <div>
-                          <div className="font-medium text-slate-900">{merchant.name}</div>
-                          <div className="text-xs text-slate-500">{merchant.description}</div>
+                          <div className="font-medium text-text">{merchant.name}</div>
+                          <div className="text-xs text-muted">{merchant.description}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-500">
+                    <td className="px-6 py-4 text-muted">
                       {merchant.address || '-'}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium
-                        ${merchant.status === 'active' ? 'bg-green-100 text-green-700' : 
-                          merchant.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                          'bg-red-100 text-red-700'}`}
+                        ${merchant.status === 'active' ? 'bg-success/10 text-success' : 
+                          merchant.status === 'pending' ? 'bg-warning/10 text-warning' : 
+                          'bg-danger/10 text-danger'}`}
                       >
                         {merchant.status === 'active' ? 'Actif' : merchant.status === 'pending' ? 'En attente' : 'Inactif'}
                       </span>
@@ -134,7 +134,7 @@ export function Merchants() {
                           setSelectedMerchant(merchant);
                           setIsEditModalOpen(true);
                         }}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        className="text-primary hover:text-primary-strong text-sm font-medium"
                       >
                         Modifier
                       </button>
