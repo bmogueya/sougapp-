@@ -557,7 +557,7 @@ function PaymentPanel({
       <div className="flex items-center gap-2 border-b border-border px-5 py-4">
         <CreditCard size={16} className="text-muted" />
         <h2 className="text-sm font-semibold tracking-tight text-text">
-          {t("analytics.paymentMethods") || "Paiements"}
+          {t("analytics.paymentMethods", { defaultValue: "Paiements" })}
         </h2>
       </div>
       <div className="min-h-[200px] flex-1 px-2 py-4">
@@ -589,7 +589,7 @@ function CityPanel({
       <div className="flex items-center gap-2 border-b border-border px-5 py-4">
         <MapPin size={16} className="text-muted" />
         <h2 className="text-sm font-semibold tracking-tight text-text">
-          {t("analytics.cities") || "Villes"}
+          {t("analytics.cities", { defaultValue: "Villes" })}
         </h2>
       </div>
       <div className="min-h-[200px] flex-1 px-2 py-4">
@@ -623,7 +623,7 @@ function ModuleComparisonPanel({
       <div className="flex items-center gap-2 border-b border-border px-5 py-4">
         <Store size={16} className="text-muted" />
         <h2 className="text-sm font-semibold tracking-tight text-text">
-          {t("analytics.modules") || "Modules"}
+          {t("analytics.modules", { defaultValue: "Modules" })}
         </h2>
       </div>
       <ul className="flex-1 divide-y divide-border">
@@ -639,7 +639,7 @@ function ModuleComparisonPanel({
                   {t(`modules.${mod.name}`)}
                 </div>
                 <div className="flex gap-3 text-[11px] text-muted">
-                  <span>{formatNumber(mod.orders, lang)} commandes</span>
+                  <span>{formatNumber(mod.orders, lang)} {t("analytics.ordersCount")}</span>
                   <span>{formatMRU(mod.revenue, lang, { compact: true })}</span>
                 </div>
               </div>

@@ -18,6 +18,12 @@ const resources = {
       "logout": "Déconnexion",
       "language": "Langue",
       "welcome": "Bienvenue sur SougApp",
+      "analytics": {
+        "paymentMethods": "Paiements",
+        "cities": "Villes",
+        "modules": "Modules",
+        "ordersCount": "commandes"
+      },
       "console": {
         "city": "Nouakchott",
         "liveMarket": "Marché en direct",
@@ -90,6 +96,12 @@ const resources = {
       "logout": "Logout",
       "language": "Language",
       "welcome": "Welcome to SougApp",
+      "analytics": {
+        "paymentMethods": "Payments",
+        "cities": "Cities",
+        "modules": "Modules",
+        "ordersCount": "orders"
+      },
       "console": {
         "city": "Nouakchott",
         "liveMarket": "Market live",
@@ -162,6 +174,12 @@ const resources = {
       "logout": "تسجيل الخروج",
       "language": "اللغة",
       "welcome": "مرحبًا بكم في سوق آب",
+      "analytics": {
+        "paymentMethods": "طرق الدفع",
+        "cities": "المدن",
+        "modules": "الوحدات",
+        "ordersCount": "طلب"
+      },
       "console": {
         "city": "نواكشوط",
         "liveMarket": "السوق مباشر",
