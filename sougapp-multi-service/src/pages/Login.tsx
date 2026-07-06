@@ -52,6 +52,13 @@ export function Login() {
       <div className="min-h-screen bg-bg flex items-center justify-center p-4">
         <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
           <div className="text-center mb-8">
+            <div className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+                <path d="M50 10 C28 10 10 28 10 50 C10 72 28 90 50 90 C72 90 85 72 85 50 C85 28 72 10 50 10Z" fill="currentColor" opacity="0.3"/>
+                <path d="M50 20 C38 20 28 30 28 42 C28 54 38 64 50 64 C58 64 65 56 65 50 C62 56 52 60 44 56 C36 52 34 40 40 32 C44 26 47 22 50 20Z" fill="currentColor"/>
+                <path d="M55 52 L58 46 L62 52 L69 53 L63 58 L65 65 L58 61 L51 65 L53 58 L47 53 L55 52Z" fill="#C28A2E"/>
+              </svg>
+            </div>
             <h1 className="text-2xl font-bold text-text">Réinitialisation</h1>
             <p className="text-muted mt-2">Recevez un lien pour réinitialiser votre mot de passe</p>
           </div>
@@ -118,6 +125,13 @@ export function Login() {
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
       <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
         <div className="text-center mb-8">
+          <div className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+              <path d="M50 10 C28 10 10 28 10 50 C10 72 28 90 50 90 C72 90 85 72 85 50 C85 28 72 10 50 10Z" fill="currentColor" opacity="0.3"/>
+              <path d="M50 20 C38 20 28 30 28 42 C28 54 38 64 50 64 C58 64 65 56 65 50 C62 56 52 60 44 56 C36 52 34 40 40 32 C44 26 47 22 50 20Z" fill="currentColor"/>
+              <path d="M55 52 L58 46 L62 52 L69 53 L63 58 L65 65 L58 61 L51 65 L53 58 L47 53 L55 52Z" fill="#C28A2E"/>
+            </svg>
+          </div>
           <h1 className="text-2xl font-bold text-text">SougApp Admin</h1>
           <p className="text-muted mt-2">Connectez-vous à votre compte</p>
         </div>
