@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatNumber, formatMRU } from "./utils";
+import { cn, formatNumber, formatMRU, formatDelta } from "./utils";
 
 describe("cn", () => {
   it("merges class names", () => {
@@ -27,5 +27,21 @@ describe("formatMRU", () => {
   it("supports compact mode", () => {
     const result = formatMRU(2500000, "fr", { compact: true });
     expect(result).toContain("M");
+  });
+});
+
+describe("formatDelta", () => {
+  it("formats positive delta", () => {
+    const result = formatDelta(12.5);
+    expect(result).toContain("12");
+    expect(result).toContain("5");
+    expect(result.startsWith("+")).toBe(true);
+  });
+
+  it("formats negative delta", () => {
+    const result = formatDelta(-3.2);
+    expect(result).toContain("3");
+    expect(result).toContain("2");
+    expect(result.startsWith("-")).toBe(true);
   });
 });
