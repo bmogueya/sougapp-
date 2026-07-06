@@ -74,8 +74,11 @@ export function Zones() {
                 </tr>
               ) : zones.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-6 py-8 text-center text-muted">
-                    Aucune zone trouvée.
+                  <td colSpan={3} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <Map size={40} className="text-faint" />
+                      <p className="text-muted">Aucune zone trouvée.</p>
+                    </div>
                   </td>
                 </tr>
               ) : (

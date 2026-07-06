@@ -143,7 +143,12 @@ export function Finance() {
               {loading ? (
                 <tr><td colSpan={5} className="px-6 py-8 text-center text-muted">Chargement...</td></tr>
               ) : transactions.length === 0 ? (
-                <tr><td colSpan={5} className="px-6 py-8 text-center text-muted">Aucune transaction trouvée.</td></tr>
+                <tr><td colSpan={5} className="px-6 py-12 text-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <Wallet size={40} className="text-faint" />
+                    <p className="text-muted">Aucune transaction trouvée.</p>
+                  </div>
+                </td></tr>
               ) : transactions.map((trx) => (
                 <tr key={trx.id} className="border-b border-border hover:bg-surface-2 transition-colors">
                   <td className="px-6 py-4 font-medium text-text">{trx.id.split('-')[0]}...</td>

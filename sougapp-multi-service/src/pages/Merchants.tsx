@@ -98,8 +98,11 @@ export function Merchants() {
                 </tr>
               ) : filteredMerchants.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-muted">
-                    Aucun marchand trouvé.
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <Store size={40} className="text-faint" />
+                      <p className="text-muted">Aucun marchand trouvé.</p>
+                    </div>
                   </td>
                 </tr>
               ) : (

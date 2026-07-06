@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShoppingBag, Utensils, Pill, Package, CarFront, CalendarDays } from 'lucide-react';
+import { ShoppingBag, Utensils, Pill, Package, CarFront, CalendarDays, Blocks } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Module {
@@ -67,6 +67,11 @@ export function Modules() {
       {loading ? (
         <div className="flex justify-center items-center h-64 text-muted">
           Chargement des modules...
+        </div>
+      ) : modules.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 gap-3">
+          <Blocks size={40} className="text-faint" />
+          <p className="text-muted">Aucun module trouvé.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
-import { Package, Truck, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Package, Truck, CheckCircle, Clock, XCircle, ShoppingBag } from 'lucide-react';
 
 interface Order {
   id: string;
@@ -101,8 +101,11 @@ export default function Orders() {
                 </tr>
               ) : orders.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-muted">
-                    Aucune commande trouvée.
+                  <td colSpan={5} className="p-8 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <ShoppingBag size={40} className="text-faint" />
+                      <p className="text-muted">Aucune commande trouvée.</p>
+                    </div>
                   </td>
                 </tr>
               ) : (

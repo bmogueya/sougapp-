@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
-import { Search, UserPlus } from 'lucide-react';
+import { Search, UserPlus, Users as UsersIcon } from 'lucide-react';
 import { UserModal } from '../components/UserModal';
 import { EditUserModal } from '../components/EditUserModal';
 
@@ -99,8 +99,11 @@ export function Users() {
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-muted">
-                    Aucun utilisateur trouvé.
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <UsersIcon size={40} className="text-faint" />
+                      <p className="text-muted">Aucun utilisateur trouvé.</p>
+                    </div>
                   </td>
                 </tr>
               ) : (

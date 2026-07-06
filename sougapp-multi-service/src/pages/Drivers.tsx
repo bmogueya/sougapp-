@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, UserPlus, MapPin, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, UserPlus, MapPin, CheckCircle2, XCircle, Car } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Driver {
@@ -93,7 +93,12 @@ export function Drivers() {
                 </tr>
               ) : filteredDrivers.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-muted">Aucun livreur trouvé.</td>
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <Car size={40} className="text-faint" />
+                      <p className="text-muted">Aucun livreur trouvé.</p>
+                    </div>
+                  </td>
                 </tr>
               ) : (
                 filteredDrivers.map((driver) => (
