@@ -29,7 +29,6 @@ export function Users() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    // In a real app, this might require a specific view or admin access
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -37,13 +36,6 @@ export function Users() {
 
     if (!error && data) {
       setUsers(data);
-    } else {
-      // Mock data for display purposes if table doesn't exist yet
-      setUsers([
-        { id: '1', first_name: 'Sidi', last_name: 'Mohamed', role: 'super_admin', phone: '+222 45 00 00 01', created_at: new Date().toISOString() },
-        { id: '2', first_name: 'Aminata', last_name: 'Diallo', role: 'customer', phone: '+222 45 00 00 02', created_at: new Date().toISOString() },
-        { id: '3', first_name: 'Demba', last_name: 'Sy', role: 'driver', phone: '+222 45 00 00 03', created_at: new Date().toISOString() },
-      ]);
     }
     setLoading(false);
   };

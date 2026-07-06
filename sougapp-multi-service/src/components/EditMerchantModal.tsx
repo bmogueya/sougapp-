@@ -8,7 +8,7 @@ interface Merchant {
   name: string;
   description: string;
   address: string;
-  status: string;
+  is_open: boolean;
   created_at: string;
 }
 
@@ -28,7 +28,7 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
     name: '',
     description: '',
     address: '',
-    status: 'pending'
+    is_open: true
   });
 
   useEffect(() => {
@@ -37,13 +37,14 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
         name: merchant.name || '',
         description: merchant.description || '',
         address: merchant.address || '',
-        status: merchant.status || 'pending'
+        is_open: merchant.is_open ?? true
       });
     }
   }, [merchant]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,12 +55,12 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
     setError(null);
 
     const { error: updateError } = await supabase
-      .from('merchants')
+      .from('stores')
       .update({ 
         name: formData.name, 
         description: formData.description,
         address: formData.address,
-        status: formData.status
+        is_open: formData.is_open
       })
       .eq('id', merchant.id);
 
@@ -77,7 +78,7 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
   if (!merchant) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Modifier le Marchand">
+    <Modal isOpen={isOpen} onClose={onClose} title="Modifier la Boutique">
       {error && (
         <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
           {error}
@@ -86,7 +87,7 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-text mb-1">Nom de la boutique/restaurant</label>
+          <label className="block text-sm font-medium text-text mb-1">Nom de la boutique</label>
           <input
             type="text"
             name="name"
@@ -120,17 +121,16 @@ export function EditMerchantModal({ isOpen, onClose, onSuccess, merchant }: Edit
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text mb-1">Statut</label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
-          >
-            <option value="pending">En attente (Pending)</option>
-            <option value="active">Actif</option>
-            <option value="inactive">Inactif</option>
-          </select>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              name="is_open"
+              checked={formData.is_open}
+              onChange={handleChange}
+              className="rounded border-border text-primary focus:ring-primary"
+            />
+            <span className="text-sm font-medium text-text">Boutique Ouverte</span>
+          </label>
         </div>
 
         <div className="pt-4 flex justify-end gap-3">

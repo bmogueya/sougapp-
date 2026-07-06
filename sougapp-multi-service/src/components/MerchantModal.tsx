@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal } from './Modal';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,37 +13,52 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [merchants, setMerchants] = useState<{id: string, first_name: string, last_name: string}[]>([]);
   
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     address: '',
-    status: 'pending'
+    is_open: true,
+    owner_id: '',
+    module_id: 'food' // fallback
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      // Fetch users with merchant role
+      supabase.from('profiles').select('id, first_name, last_name').eq('role', 'merchant')
+        .then(({ data }) => {
+          if (data) {
+            setMerchants(data);
+            if (data.length > 0) setFormData(prev => ({ ...prev, owner_id: data[0].id }));
+          }
+        });
+    }
+  }, [isOpen]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      setError("Vous devez être connecté pour effectuer cette action.");
-      return;
-    }
+    if (!user) return;
     
     setLoading(true);
     setError(null);
 
     const { error: insertError } = await supabase
-      .from('merchants')
+      .from('stores')
       .insert([
         { 
           name: formData.name, 
           description: formData.description,
           address: formData.address,
-          status: formData.status,
-          owner_id: user.id
+          is_open: formData.is_open,
+          owner_id: formData.owner_id,
+          module_id: formData.module_id
         }
       ]);
 
@@ -59,7 +74,7 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Ajouter un Marchand">
+    <Modal isOpen={isOpen} onClose={onClose} title="Créer une Boutique">
       {error && (
         <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
           {error}
@@ -68,7 +83,23 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-text mb-1">Nom de la boutique/restaurant</label>
+          <label className="block text-sm font-medium text-text mb-1">Propriétaire (Marchand)</label>
+          <select
+            name="owner_id"
+            value={formData.owner_id}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+            required
+          >
+            {merchants.map(m => (
+              <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>
+            ))}
+            {merchants.length === 0 && <option value="">Aucun marchand disponible</option>}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-text mb-1">Nom de la boutique</label>
           <input
             type="text"
             name="name"
@@ -102,17 +133,16 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text mb-1">Statut initial</label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
-          >
-            <option value="pending">En attente (Pending)</option>
-            <option value="active">Actif</option>
-            <option value="inactive">Inactif</option>
-          </select>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              name="is_open"
+              checked={formData.is_open}
+              onChange={handleChange}
+              className="rounded border-border text-primary focus:ring-primary"
+            />
+            <span className="text-sm font-medium text-text">Boutique Ouverte</span>
+          </label>
         </div>
 
         <div className="pt-4 flex justify-end gap-3">
@@ -125,10 +155,10 @@ export function MerchantModal({ isOpen, onClose, onSuccess }: MerchantModalProps
           </button>
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !formData.owner_id}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary-strong transition-colors disabled:opacity-50"
           >
-            {loading ? 'Création...' : 'Créer le marchand'}
+            {loading ? 'Création...' : 'Créer la boutique'}
           </button>
         </div>
       </form>

@@ -10,8 +10,13 @@ interface Merchant {
   name: string;
   description: string;
   address: string;
-  status: string;
+  is_open: boolean;
   created_at: string;
+  profiles?: {
+    first_name: string;
+    last_name: string;
+    phone: string;
+  };
 }
 
 export function Merchants() {
@@ -30,25 +35,18 @@ export function Merchants() {
   const fetchMerchants = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from('merchants')
-      .select('*')
+      .from('stores')
+      .select('*, profiles!stores_owner_id_fkey(first_name, last_name, phone)')
       .order('created_at', { ascending: false });
 
     if (!error && data) {
-      setMerchants(data);
-    } else {
-      // Données statiques de démonstration en attendant la base de données
-      setMerchants([
-        { id: '1', name: 'Superette Nouakchott', description: 'Epicerie générale', address: 'Tevragh Zeina', status: 'active', created_at: new Date().toISOString() },
-        { id: '2', name: 'Pharmacie Centrale', description: 'Médicaments et parapharmacie', address: 'Ksar', status: 'active', created_at: new Date().toISOString() },
-        { id: '3', name: 'Burger Express', description: 'Restauration rapide', address: 'Arafat', status: 'pending', created_at: new Date().toISOString() },
-      ]);
+      setMerchants(data as any);
     }
     setLoading(false);
   };
 
   const filteredMerchants = merchants.filter(m => 
-    m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    m.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (m.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
@@ -124,11 +122,9 @@ export function Merchants() {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium
-                        ${merchant.status === 'active' ? 'bg-success/10 text-success' : 
-                          merchant.status === 'pending' ? 'bg-warning/10 text-warning' : 
-                          'bg-danger/10 text-danger'}`}
+                        ${merchant.is_open ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}
                       >
-                        {merchant.status === 'active' ? 'Actif' : merchant.status === 'pending' ? 'En attente' : 'Inactif'}
+                        {merchant.is_open ? 'Ouvert' : 'Fermé'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
