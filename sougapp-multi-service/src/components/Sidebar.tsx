@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Store, Map, ShoppingBag, Settings, Car, Wallet, Blocks, X } from 'lucide-react';
+import { LayoutDashboard, Users, Store, Map, ShoppingBag, Settings, Car, Wallet, Blocks, X, Navigation, Megaphone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '../lib/utils';
 

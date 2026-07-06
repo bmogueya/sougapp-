@@ -10,6 +10,7 @@ import {
   Bell,
   Menu,
   X,
+  Tag,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../lib/utils";
@@ -18,6 +19,7 @@ const NAV = [
   { to: "/merchant", label: "Vue d'ensemble", icon: Store },
   { to: "/merchant/orders", label: "Commandes", icon: ShoppingBag },
   { to: "/merchant/products", label: "Produits", icon: Package },
+  { to: "/merchant/categories", label: "Catégories", icon: Tag },
   { to: "/merchant/settings", label: "Paramètres", icon: Settings },
 ];
 

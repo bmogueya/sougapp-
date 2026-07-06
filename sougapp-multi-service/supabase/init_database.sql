@@ -535,3 +535,244 @@ drop trigger if exists on_profile_created on public.profiles;
 create trigger on_profile_created
   after insert on public.profiles
   for each row execute procedure public.handle_new_wallet();
+-- =============================================================================
+-- 10_promotions_schema.sql
+-- Tables pour le système de Promotions (Bannières & Coupons)
+-- =============================================================================
+
+-- 1. Table BANNERS
+create table if not exists public.banners (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null,
+  image_url text not null,
+  module_id text references public.modules(id), -- Peut être null si bannière globale
+  is_active boolean not null default true,
+  start_date timestamp with time zone,
+  end_date timestamp with time zone,
+  link_url text, -- Lien externe ou interne (ex: /merchant/123)
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.banners enable row level security;
+
+-- L'app client peut lire les bannières actives
+create policy "Tout le monde peut voir les bannières actives" on public.banners
+  for select using (is_active = true and (start_date is null or start_date <= now()) and (end_date is null or end_date >= now()));
+
+-- Super admin peut tout faire sur les bannières
+create policy "Super admin peut tout faire sur les bannières" on public.banners
+  for all using (public.is_admin()) with check (public.is_admin());
+
+
+-- 2. Table COUPONS
+create type discount_type as enum ('amount', 'percentage');
+
+create table if not exists public.coupons (
+  id uuid primary key default uuid_generate_v4(),
+  code text not null unique,
+  discount_type discount_type not null default 'percentage',
+  discount_value decimal(10,2) not null,
+  min_purchase decimal(10,2) default 0,
+  max_discount decimal(10,2), -- Utile pour les pourcentages (ex: -50% jusqu'à max 1000 MRU)
+  start_date timestamp with time zone,
+  end_date timestamp with time zone,
+  is_active boolean not null default true,
+  usage_limit integer, -- Nombre max d'utilisations au total
+  used_count integer default 0,
+  module_id text references public.modules(id), -- Null si global
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.coupons enable row level security;
+
+-- L'app client peut lire les coupons actifs (utile pour valider un code)
+create policy "Tout le monde peut lire les coupons" on public.coupons
+  for select using (is_active = true);
+
+-- Super admin peut tout faire sur les coupons
+create policy "Super admin peut tout faire sur les coupons" on public.coupons
+  for all using (public.is_admin()) with check (public.is_admin());
+-- =============================================================================
+-- 11_products_schema.sql
+-- Tables pour le catalogue des produits et les catégories (Merchant Panel)
+-- =============================================================================
+
+-- 1. Table CATEGORIES
+create table if not exists public.categories (
+  id uuid primary key default uuid_generate_v4(),
+  name text not null,
+  image_url text,
+  module_id text references public.modules(id), -- Chaque catégorie appartient à un module (ex: Fast Food)
+  is_active boolean not null default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.categories enable row level security;
+
+create policy "Tout le monde peut lire les categories actives" on public.categories
+  for select using (is_active = true);
+
+create policy "Admins et marchands peuvent tout faire sur les categories" on public.categories
+  for all using (public.is_admin() or auth.uid() in (select id from public.profiles where role = 'merchant'));
+
+
+-- 2. Table PRODUCTS
+create table if not exists public.products (
+  id uuid primary key default uuid_generate_v4(),
+  merchant_id uuid references auth.users(id) not null, -- Le marchand propriétaire
+  category_id uuid references public.categories(id) not null,
+  module_id text references public.modules(id) not null,
+  name text not null,
+  description text,
+  price decimal(10,2) not null,
+  discount_price decimal(10,2),
+  image_url text,
+  in_stock boolean not null default true,
+  stock_quantity integer default -1, -- -1 = illimité
+  is_active boolean not null default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.products enable row level security;
+
+-- L'app client peut lire les produits actifs
+create policy "Tout le monde peut lire les produits actifs" on public.products
+  for select using (is_active = true);
+
+-- Un marchand peut lire, modifier, insérer et supprimer SES propres produits
+create policy "Le marchand gere ses propres produits" on public.products
+  for all using (auth.uid() = merchant_id) with check (auth.uid() = merchant_id);
+
+-- Un admin peut lire et modifier tous les produits
+create policy "Admin peut gerer tous les produits" on public.products
+  for all using (public.is_admin()) with check (public.is_admin());
+-- =============================================================================
+-- 12_orders_schema.sql
+-- Tables pour le cycle de vie des Commandes (Order Service)
+-- =============================================================================
+
+-- 1. Enumération des statuts de commande
+create type order_status as enum (
+  'pending',        -- En attente d'acceptation par le marchand
+  'accepted',       -- Acceptée par le marchand
+  'preparing',      -- En cours de préparation
+  'ready',          -- Prête à être récupérée par le livreur
+  'on_the_way',     -- Récupérée par le livreur, en route vers le client
+  'delivered',      -- Livrée avec succès
+  'cancelled',      -- Annulée
+  'failed'          -- Échouée (ex: client absent)
+);
+
+-- 2. Table ORDERS
+create table if not exists public.orders (
+  id uuid primary key default uuid_generate_v4(),
+  customer_id uuid references auth.users(id) not null,
+  merchant_id uuid references auth.users(id) not null,
+  driver_id uuid references auth.users(id), -- Peut être null si non assigné
+  module_id text references public.modules(id) not null,
+  
+  status order_status not null default 'pending',
+  
+  -- Détails financiers
+  subtotal decimal(12,2) not null,
+  delivery_fee decimal(10,2) not null default 0,
+  discount_amount decimal(10,2) not null default 0,
+  total_amount decimal(12,2) not null,
+  
+  -- Adresses (simulées par du texte ou JSON pour l'instant)
+  delivery_address text not null,
+  delivery_latitude double precision,
+  delivery_longitude double precision,
+  
+  -- Notes
+  customer_note text,
+  
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.orders enable row level security;
+
+-- Politiques de sécurité (RLS) pour Orders
+create policy "Le client voit ses commandes" on public.orders
+  for select using (auth.uid() = customer_id);
+
+create policy "Le marchand voit et modifie les commandes de sa boutique" on public.orders
+  for all using (auth.uid() = merchant_id) with check (auth.uid() = merchant_id);
+
+create policy "Le livreur voit et modifie ses livraisons" on public.orders
+  for all using (auth.uid() = driver_id) with check (auth.uid() = driver_id);
+
+create policy "Admins voient toutes les commandes" on public.orders
+  for all using (public.is_admin()) with check (public.is_admin());
+
+
+-- 3. Table ORDER_ITEMS (Le contenu du panier)
+create table if not exists public.order_items (
+  id uuid primary key default uuid_generate_v4(),
+  order_id uuid references public.orders(id) on delete cascade not null,
+  product_id uuid references public.products(id) not null,
+  
+  quantity integer not null check (quantity > 0),
+  unit_price decimal(10,2) not null, -- Le prix au moment de l'achat
+  total_price decimal(12,2) not null,
+  
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.order_items enable row level security;
+
+-- Politiques pour Order Items (Héritent logiciellement de la table Orders, mais on simplifie ici)
+create policy "Les items de commande sont lisibles par les impliqués" on public.order_items
+  for select using (
+    exists (
+      select 1 from public.orders 
+      where orders.id = order_items.order_id 
+      and (orders.customer_id = auth.uid() or orders.merchant_id = auth.uid() or orders.driver_id = auth.uid() or public.is_admin())
+    )
+  );
+
+-- Seul le système (ou admin) devrait insérer des items, ou le client lors du checkout.
+-- Pour simplifier, on laisse l'accès large aux impliqués.
+create policy "Modifications items autorisées" on public.order_items
+  for all using (true) with check (true);
+-- =============================================================================
+-- 13_stores_schema.sql
+-- Table pour la gestion des Boutiques / Restaurants (Merchant Stores)
+-- =============================================================================
+
+create table if not exists public.stores (
+  id uuid primary key default uuid_generate_v4(),
+  owner_id uuid references auth.users(id) not null, -- Le profil (merchant) propriétaire
+  module_id text references public.modules(id) not null, -- Ex: Food, Pharmacy
+  name text not null,
+  description text,
+  logo_url text,
+  cover_url text,
+  address text,
+  latitude double precision,
+  longitude double precision,
+  phone text,
+  is_open boolean not null default true,
+  opening_time time,
+  closing_time time,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Note: En production, un marchand pourrait avoir plusieurs magasins,
+-- mais pour commencer, nous associerons un owner_id = un magasin unique
+create unique index idx_stores_owner_id on public.stores(owner_id);
+
+alter table public.stores enable row level security;
+
+-- L'app client peut lire tous les magasins ouverts et actifs
+create policy "Tout le monde peut lire les magasins" on public.stores
+  for select using (true);
+
+-- Le marchand peut gérer son magasin
+create policy "Le marchand gere son magasin" on public.stores
+  for all using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
+
+-- Les admins peuvent gérer tous les magasins
+create policy "Admin gere tous les magasins" on public.stores
+  for all using (public.is_admin()) with check (public.is_admin());

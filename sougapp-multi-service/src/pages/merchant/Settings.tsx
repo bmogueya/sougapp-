@@ -1,19 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Store, MapPin, Phone, Clock, Save } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function MerchantSettings() {
+  const { session } = useAuth();
   const [shop, setShop] = useState({
-    name: "Mon Magasin",
-    description: "Boutique de produits frais et variés",
-    phone: "+222 12 34 56 78",
-    address: "Tevragh Zeina, Nouakchott",
+    name: "",
+    description: "",
+    phone: "",
+    address: "",
     opening: "08:00",
     closing: "22:00",
   });
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
+  useEffect(() => {
+    if (session?.user.id) fetchStore();
+  }, [session?.user.id]);
+
+  const fetchStore = async () => {
+    const { data } = await supabase
+      .from('stores')
+      .select('*')
+      .eq('owner_id', session!.user.id)
+      .single();
+    
+    if (data) {
+      setShop({
+        name: data.name || "",
+        description: data.description || "",
+        phone: data.phone || "",
+        address: data.address || "",
+        opening: data.opening_time ? data.opening_time.substring(0, 5) : "08:00",
+        closing: data.closing_time ? data.closing_time.substring(0, 5) : "22:00",
+      });
+    }
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    const { data: existing } = await supabase
+      .from('stores')
+      .select('id')
+      .eq('owner_id', session!.user.id)
+      .single();
+
+    const payload = {
+      name: shop.name,
+      description: shop.description,
+      phone: shop.phone,
+      address: shop.address,
+      opening_time: shop.opening + ":00",
+      closing_time: shop.closing + ":00",
+    };
+
+    if (existing) {
+      await supabase.from('stores').update(payload).eq('owner_id', session!.user.id);
+    } else {
+      await supabase.from('stores').insert({
+        ...payload,
+        owner_id: session!.user.id,
+        module_id: 'food', // fallback
+        is_open: true
+      });
+    }
+
+    setLoading(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

@@ -1,10 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-// Rôles autorisés à accéder au back-office d'administration.
-const ADMIN_ROLES = ['super_admin', 'dispatcher'];
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+}
 
-export function ProtectedRoute() {
+export function ProtectedRoute({ allowedRoles = ['super_admin', 'dispatcher'] }: ProtectedRouteProps) {
   const { session, role, loading, signOut } = useAuth();
 
   if (loading) {
@@ -20,8 +21,8 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace />;
   }
 
-  // Session valide mais rôle non autorisé => accès refusé (pas seulement "connecté").
-  if (!role || !ADMIN_ROLES.includes(role)) {
+  // Session valide mais rôle non autorisé
+  if (!role || !allowedRoles.includes(role)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-4">
         <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border text-center">

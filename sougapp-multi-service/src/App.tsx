@@ -21,6 +21,7 @@ const Dispatch = lazy(() => import('./pages/Dispatch').then(m => ({ default: m.D
 const MerchantDashboard = lazy(() => import('./pages/merchant/Dashboard').then(m => ({ default: m.MerchantDashboard })));
 const MerchantProducts = lazy(() => import('./pages/merchant/Products').then(m => ({ default: m.MerchantProducts })));
 const MerchantOrders = lazy(() => import('./pages/merchant/Orders').then(m => ({ default: m.MerchantOrders })));
+const MerchantCategories = lazy(() => import('./pages/merchant/Categories').then(m => ({ default: m.MerchantCategories })));
 const MerchantSettings = lazy(() => import('./pages/merchant/Settings').then(m => ({ default: m.MerchantSettings })));
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
             <Route path="/merchant" element={<Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}><MerchantLayout /></Suspense>}>
               <Route index element={<MerchantDashboard />} />
               <Route path="products" element={<MerchantProducts />} />
+              <Route path="categories" element={<MerchantCategories />} />
               <Route path="orders" element={<MerchantOrders />} />
               <Route path="settings" element={<MerchantSettings />} />
             </Route>
