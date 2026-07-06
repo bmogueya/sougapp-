@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import {
   Area,
   Line,
+  Bar,
+  BarChart,
   ComposedChart,
   ResponsiveContainer,
   Tooltip,
@@ -11,7 +13,7 @@ import {
   CartesianGrid,
   type TooltipContentProps,
 } from "recharts";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Store, CreditCard, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   KPIS,
@@ -22,6 +24,7 @@ import {
   type ModuleStat,
   type RecentOrder,
 } from "@/data/dashboard";
+import { ORDERS, PAYMENT_LABELS } from "@/data/orders";
 import { MODULE_MAP } from "@/data/modules";
 import { Card } from "@/components/ui/Card";
 import { DeltaPill } from "@/components/ui/DeltaPill";
@@ -45,6 +48,38 @@ export function Dashboard() {
     [],
   );
 
+  const paymentData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    ORDERS.forEach((o) => {
+      const label = PAYMENT_LABELS[o.payment] || o.payment;
+      counts[label] = (counts[label] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([method, orders]) => ({ method, orders }))
+      .sort((a, b) => b.orders - a.orders);
+  }, []);
+
+  const cityData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    ORDERS.forEach((o) => {
+      counts[o.city] = (counts[o.city] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([city, orders]) => ({ city: city.charAt(0).toUpperCase() + city.slice(1), orders }))
+      .sort((a, b) => b.orders - a.orders);
+  }, []);
+
+  const moduleCompareData = useMemo(() => {
+    return [...MODULE_STATS]
+      .sort((a, b) => b.orders - a.orders)
+      .map((m) => ({
+        name: m.key,
+        orders: m.orders,
+        revenue: m.revenue,
+        icon: MODULE_MAP[m.key].icon,
+      }));
+  }, []);
+
   return (
     <div className="mx-auto max-w-[1440px] space-y-6">
       <ConsoleHeader />
@@ -54,6 +89,12 @@ export function Dashboard() {
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <RevenuePanel locale={locale} className="xl:col-span-2" />
         <FluxPanel orders={RECENT_ORDERS} lang={lang} />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <PaymentPanel data={paymentData} lang={lang} />
+        <CityPanel data={cityData} lang={lang} />
+        <ModuleComparisonPanel data={moduleCompareData} lang={lang} />
       </div>
     </div>
   );
@@ -498,6 +539,124 @@ function FluxPanel({
         {t("flux.viewAll")}
         <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden />
       </Link>
+    </Card>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * Payment method breakdown — how customers pay across the souk.
+ * ───────────────────────────────────────────────────────────── */
+function PaymentPanel({
+  data,
+  lang,
+}: {
+  data: { method: string; orders: number }[];
+  lang: string;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Card className="flex flex-col">
+      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+        <CreditCard size={16} className="text-muted" />
+        <h2 className="text-sm font-semibold tracking-tight text-text">
+          {t("analytics.paymentMethods") || "Paiements"}
+        </h2>
+      </div>
+      <div className="min-h-[200px] flex-1 px-2 py-4">
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={data} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid horizontal={false} stroke="rgb(var(--border))" strokeDasharray="3 3" />
+            <XAxis type="number" tick={{ fill: "rgb(var(--faint))", fontSize: 11 }} tickLine={false} axisLine={false} />
+            <YAxis type="category" dataKey="method" tick={{ fill: "rgb(var(--text))", fontSize: 11 }} tickLine={false} axisLine={false} width={70} />
+            <Tooltip cursor={{ fill: "rgb(var(--surface-2))" }} contentStyle={{ background: "rgb(var(--overlay))", border: "1px solid rgb(var(--border))", borderRadius: 12, fontSize: 12 }} />
+            <Bar dataKey="orders" fill="rgb(var(--primary))" radius={[0, 4, 4, 0]} maxBarSize={20} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * City distribution — orders grouped by city.
+ * ───────────────────────────────────────────────────────────── */
+function CityPanel({
+  data,
+  lang,
+}: {
+  data: { city: string; orders: number }[];
+  lang: string;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Card className="flex flex-col">
+      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+        <MapPin size={16} className="text-muted" />
+        <h2 className="text-sm font-semibold tracking-tight text-text">
+          {t("analytics.cities") || "Villes"}
+        </h2>
+      </div>
+      <div className="min-h-[200px] flex-1 px-2 py-4">
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={data} margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid vertical={false} stroke="rgb(var(--border))" strokeDasharray="3 3" />
+            <XAxis dataKey="city" tick={{ fill: "rgb(var(--text))", fontSize: 11 }} tickLine={false} axisLine={false} />
+            <YAxis tick={{ fill: "rgb(var(--faint))", fontSize: 11 }} tickLine={false} axisLine={false} width={30} />
+            <Tooltip cursor={{ fill: "rgb(var(--surface-2))" }} contentStyle={{ background: "rgb(var(--overlay))", border: "1px solid rgb(var(--border))", borderRadius: 12, fontSize: 12 }} />
+            <Bar dataKey="orders" fill="rgb(var(--gold))" radius={[4, 4, 0, 0]} maxBarSize={32} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * Module comparison — each service's order volume vs revenue.
+ * ───────────────────────────────────────────────────────────── */
+function ModuleComparisonPanel({
+  data,
+  lang,
+}: {
+  data: { name: string; orders: number; revenue: number; icon: React.ComponentType<{ size?: number; className?: string }> }[];
+  lang: string;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Card className="flex flex-col">
+      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+        <Store size={16} className="text-muted" />
+        <h2 className="text-sm font-semibold tracking-tight text-text">
+          {t("analytics.modules") || "Modules"}
+        </h2>
+      </div>
+      <ul className="flex-1 divide-y divide-border">
+        {data.slice(0, 6).map((mod) => {
+          const accent = `rgb(var(--m-${mod.name}))`;
+          return (
+            <li key={mod.name} className="flex items-center gap-3 px-5 py-2.5 transition-colors hover:bg-surface-2">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg" style={{ backgroundColor: `rgb(var(--m-${mod.name}) / 0.12)` }}>
+                <mod.icon className="h-4 w-4" style={{ color: accent }} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-sm font-medium text-text">
+                  {t(`modules.${mod.name}`)}
+                </div>
+                <div className="flex gap-3 text-[11px] text-muted">
+                  <span>{formatNumber(mod.orders, lang)} commandes</span>
+                  <span>{formatMRU(mod.revenue, lang, { compact: true })}</span>
+                </div>
+              </div>
+              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-surface-2">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{ width: `${Math.min(100, (mod.orders / data[0].orders) * 100)}%`, backgroundColor: accent }}
+                />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </Card>
   );
 }
