@@ -28,11 +28,11 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md border border-slate-100">
+    <div className="min-h-screen bg-bg flex items-center justify-center p-4">
+      <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-slate-900">SougApp Admin</h1>
-          <p className="text-slate-500 mt-2">Connectez-vous à votre compte</p>
+          <h1 className="text-2xl font-bold text-text">SougApp Admin</h1>
+          <p className="text-muted mt-2">Connectez-vous à votre compte</p>
         </div>
 
         {error && (
@@ -43,7 +43,7 @@ export function Login() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label htmlFor="login-email" className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="login-email" className="block text-sm font-medium text-text mb-1">
               Email
             </label>
             <input
@@ -53,13 +53,13 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@sougapp.mr"
               autoComplete="email"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="login-password" className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="login-password" className="block text-sm font-medium text-text mb-1">
               Mot de passe
             </label>
             <input
@@ -69,7 +69,7 @@ export function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               autoComplete="current-password"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
               required
             />
           </div>
@@ -77,7 +77,7 @@ export function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-slate-900 text-white font-medium py-2.5 rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:bg-primary-strong transition-colors disabled:opacity-50"
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
