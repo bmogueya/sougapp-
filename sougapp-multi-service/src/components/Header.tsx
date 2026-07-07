@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 import { Globe, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
@@ -12,14 +11,12 @@ export function Header({ onMenuClick }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
 
+  // La persistance + l'application de `dir`/`lang` sont centralisées dans
+  // `i18n/config.ts` (listener `languageChanged`), donc valables pour tous
+  // les rôles. Ici on ne fait que déclencher le changement.
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
-
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
 
   return (
     <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 sticky top-0 z-10">

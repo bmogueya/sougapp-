@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { getActiveLang, applyLangDir, setLang, isLang } from '../lib/lang';
 
 const resources = {
   fr: {
@@ -238,15 +239,28 @@ const resources = {
   }
 };
 
+const activeLang = getActiveLang();
+
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: "fr", // langue par défaut
+    lng: activeLang, // langue mémorisée, sinon langue par défaut (fr)
     fallbackLng: "fr",
     interpolation: {
       escapeValue: false
     }
   });
+
+// Persiste le choix et applique la direction (dir/lang) à <html> à CHAQUE
+// changement de langue — globalement (tous les rôles), pas seulement dans le
+// chrome admin.
+i18n.on('languageChanged', (lng) => {
+  if (isLang(lng)) setLang(lng);
+});
+
+// Applique la direction dès le boot, avant tout rendu dépendant du RTL,
+// pour éviter un premier affichage en LTR quand l'arabe est mémorisé.
+applyLangDir(activeLang);
 
 export default i18n;
