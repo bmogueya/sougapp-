@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Search, Tag, Edit, Trash2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/Modal";
 import { cn } from "@/lib/utils";
@@ -17,22 +18,38 @@ interface Category {
 const EMPTY_FORM = { name: "", image_url: null as string | null, module_id: "", is_active: true };
 
 export function MerchantCategories() {
+  const { session } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [storeId, setStoreId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    if (!session?.user.id) return;
+    // On récupère d'abord la boutique du marchand, puis SES catégories
+    // (auparavant la page listait les catégories de TOUS les marchands).
+    supabase.from("stores").select("id").eq("owner_id", session.user.id).single()
+      .then(({ data }) => {
+        const sid = data?.id ?? null;
+        setStoreId(sid);
+        fetchCategories(sid);
+      });
+  }, [session?.user.id]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (sid: string | null) => {
     setLoading(true);
+    if (!sid) {
+      setCategories([]);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from("categories")
       .select("*")
+      .eq("store_id", sid)
       .order("created_at", { ascending: false });
     if (data) setCategories(data as Category[]);
     setLoading(false);
@@ -59,11 +76,23 @@ export function MerchantCategories() {
 
   const handleSave = async () => {
     if (!form.name) return;
+    // module_id est une FK vers modules(id) : "" violerait la contrainte → null.
+    const payload = {
+      name: form.name,
+      image_url: form.image_url,
+      is_active: form.is_active,
+      module_id: form.module_id || null,
+      store_id: storeId,
+    };
     if (editing) {
-      await supabase.from("categories").update(form).eq("id", editing.id);
-      setCategories((prev) => prev.map((c) => (c.id === editing.id ? { ...c, ...form } as Category : c)));
+      await supabase.from("categories").update(payload).eq("id", editing.id);
+      setCategories((prev) => prev.map((c) => (c.id === editing.id ? { ...c, ...payload } as Category : c)));
     } else {
-      const { data } = await supabase.from("categories").insert(form).select().single();
+      if (!storeId) {
+        alert("Créez d'abord votre boutique dans Paramètres avant d'ajouter des catégories.");
+        return;
+      }
+      const { data } = await supabase.from("categories").insert(payload).select().single();
       if (data) setCategories((prev) => [data as Category, ...prev]);
     }
     setModalOpen(false);

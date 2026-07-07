@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
-import { Package, Truck, CheckCircle, Clock, XCircle, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
+import { cn } from '../lib/utils';
+import { getOrderStatusMeta, ORDER_STATUS_TONE_CLASS } from '../lib/orderStatus';
 
 interface Order {
   id: string;
-  merchant_id: string;
+  store_id: string | null;
   driver_id: string | null;
   status: string;
   total_amount: number;
   delivery_address: string;
   created_at: string;
-  merchant?: { name: string };
+  store?: { name: string };
   driver?: { raw_user_meta_data?: { full_name: string } };
 }
 
@@ -44,7 +46,7 @@ export default function Orders() {
         .from('orders')
         .select(`
           *,
-          merchant:merchants(name)
+          store:stores(name)
         `)
         .order('created_at', { ascending: false });
 
@@ -58,22 +60,12 @@ export default function Orders() {
   }
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-warning/10 text-warning"><Clock size={16} /> En attente</span>;
-      case 'accepted':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-info/10 text-info"><Package size={16} /> Préparation</span>;
-      case 'ready':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-info/10 text-info"><Package size={16} /> Prêt</span>;
-      case 'delivering':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-warning/10 text-warning"><Truck size={16} /> En livraison</span>;
-      case 'completed':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-success/10 text-success"><CheckCircle size={16} /> Terminé</span>;
-      case 'cancelled':
-        return <span className="flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-danger/10 text-danger"><XCircle size={16} /> Annulé</span>;
-      default:
-        return <span className="px-3 py-1 rounded-full text-sm bg-surface-2 text-muted">{status}</span>;
-    }
+    const meta = getOrderStatusMeta(status);
+    return (
+      <span className={cn('px-3 py-1 rounded-full text-sm', ORDER_STATUS_TONE_CLASS[meta.tone])}>
+        {meta.label}
+      </span>
+    );
   };
 
   return (
@@ -113,7 +105,7 @@ export default function Orders() {
                   <tr key={order.id} className="border-b border-border hover:bg-surface-2">
                     <td className="p-4 font-mono text-sm">{order.id.substring(0, 8)}</td>
                     <td className="p-4 text-muted">{new Date(order.created_at).toLocaleString()}</td>
-                    <td className="p-4 font-medium">{order.merchant?.name || 'Inconnu'}</td>
+                    <td className="p-4 font-medium">{order.store?.name || 'Inconnu'}</td>
                     <td className="p-4">{getStatusBadge(order.status)}</td>
                     <td className="p-4 font-semibold">{order.total_amount} MRU</td>
                   </tr>

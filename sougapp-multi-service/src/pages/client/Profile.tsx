@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
-import { User, LogOut, Package } from 'lucide-react';
-import { formatMRU } from '../../lib/utils';
+import { User, LogOut, Package, Store } from 'lucide-react';
+import { formatMRU, cn } from '../../lib/utils';
+import { getOrderStatusMeta, ORDER_STATUS_TONE_CLASS } from '../../lib/orderStatus';
 
 export function ClientProfile() {
   const { user, signOut } = useAuth();
@@ -19,7 +20,7 @@ export function ClientProfile() {
     const { data } = await supabase
       .from('orders')
       .select('*, stores(name, logo)')
-      .eq('user_id', user?.id)
+      .eq('customer_id', user?.id)
       .order('created_at', { ascending: false });
 
     if (data) setOrders(data);
@@ -27,20 +28,12 @@ export function ClientProfile() {
   };
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return <span className="px-2 py-1 bg-warning/20 text-warning text-xs font-bold rounded-lg">En attente</span>;
-      case 'preparing':
-      case 'ready_for_delivery':
-      case 'delivering':
-        return <span className="px-2 py-1 bg-info/20 text-info text-xs font-bold rounded-lg">En cours</span>;
-      case 'delivered':
-        return <span className="px-2 py-1 bg-success/20 text-success text-xs font-bold rounded-lg">Livrée</span>;
-      case 'cancelled':
-        return <span className="px-2 py-1 bg-danger/20 text-danger text-xs font-bold rounded-lg">Annulée</span>;
-      default:
-        return null;
-    }
+    const meta = getOrderStatusMeta(status);
+    return (
+      <span className={cn('px-2 py-1 text-xs font-bold rounded-lg', ORDER_STATUS_TONE_CLASS[meta.tone])}>
+        {meta.label}
+      </span>
+    );
   };
 
   return (
@@ -120,6 +113,3 @@ export function ClientProfile() {
     </div>
   );
 }
-
-// Just to fix build error if Store isn't imported above
-import { Store } from 'lucide-react';

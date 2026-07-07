@@ -52,6 +52,7 @@ export function MerchantProducts() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [storeId, setStoreId] = useState<string | null>(null);
 
   useEffect(() => {
     if (session?.user.id) {
@@ -59,6 +60,10 @@ export function MerchantProducts() {
       supabase.from("categories").select("id, name").then(({ data }) => {
         if (data) setCategories(data as Category[]);
       });
+      // Boutique du marchand : requise pour que les produits soient visibles
+      // côté client (StoreView/Search filtrent par store_id).
+      supabase.from("stores").select("id").eq("owner_id", session.user.id).single()
+        .then(({ data }) => { if (data) setStoreId(data.id); });
     }
   }, [session?.user.id]);
 
@@ -112,7 +117,7 @@ export function MerchantProducts() {
   const handleSave = async () => {
     if (!session?.user.id || !form.name) return;
     setSaving(true);
-    const payload = { ...form, merchant_id: session.user.id };
+    const payload = { ...form, merchant_id: session.user.id, store_id: storeId };
     if (editing) {
       const { error } = await supabase
         .from("products")
