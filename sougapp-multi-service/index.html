@@ -5,6 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SougApp — Console</title>
+    <!-- Applique le thème AVANT le rendu React pour éviter tout flash de thème -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('sougapp-theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          if (t === 'dark') document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

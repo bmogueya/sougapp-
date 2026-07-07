@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { Globe, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -36,6 +37,8 @@ export function Header({ onMenuClick }: HeaderProps) {
       </div>
       
       <div className="flex items-center gap-6">
+        <ThemeToggle />
+
         <div className="flex items-center gap-2">
           <Globe size={18} className="text-muted" />
           <select 
