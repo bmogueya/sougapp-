@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+# Annule les runs précédents encore en cours sur la même réf.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web — sougapp-multi-service (lint · build · test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sougapp-multi-service
+    env:
+      # Valeurs factices : le build/les tests n'appellent pas Supabase,
+      # mais le client exige que ces variables soient définies.
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_ANON_KEY: ci-dummy-anon-key
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: sougapp-multi-service/package-lock.json
+
+      - name: Install (npm ci)
+        run: npm ci
+
+      - name: Lint (oxlint)
+        run: npm run lint
+
+      - name: Build (tsc + vite)
+        run: npm run build
+
+      - name: Test (vitest)
+        run: npm test
