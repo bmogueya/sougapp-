@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { ArrowLeft, Trash2, MapPin, Receipt, CheckCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function ClientCart() {
+  const { t } = useTranslation('client');
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -60,7 +62,7 @@ export function ClientCart() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 text-center animate-in zoom-in duration-500">
+      <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 text-center animate-in zoom-in duration-500" role="alert">
         <div className="w-24 h-24 bg-success/10 rounded-full flex items-center justify-center text-success mb-6">
           <CheckCircle size={48} />
         </div>
@@ -85,95 +87,94 @@ export function ClientCart() {
         <button onClick={() => navigate(-1)} className="w-10 h-10 bg-surface-2 rounded-full flex items-center justify-center text-text">
           <ArrowLeft size={20} />
         </button>
-        <h1 className="text-xl font-bold text-text">Votre Panier</h1>
+        <h1 className="text-xl font-bold text-text">{t('cart.title')}</h1>
       </div>
 
       {cartItems.length === 0 ? (
         <div className="p-8 text-center text-muted flex flex-col items-center gap-4 mt-10">
           <Receipt size={48} className="text-faint" />
-          <p>Votre panier est vide.</p>
+          <p>{t('cart.empty')}</p>
           <button 
             onClick={() => navigate('/app')}
             className="text-primary font-medium mt-4"
           >
-            Découvrir des restaurants
+            {t('cart.emptyCTA')}
           </button>
         </div>
       ) : (
-        <div className="p-4 space-y-6">
+        <div className="p-4 space-y-6 flex flex-col lg:flex-row lg:gap-6">
           
-          {/* Items */}
-          <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
-            <div className="p-4 border-b border-border bg-surface-2/50 font-medium text-text">
-              Articles
+          {/* Left column - Items + Address */}
+          <div className="flex-1 space-y-6">
+            {/* Items */}
+            <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
+              <div className="p-4 border-b border-border bg-surface-2/50 font-medium text-text">
+                Articles
+              </div>
+              <div className="divide-y divide-border">
+                {cartItems.map(item => (
+                  <div key={item.id} className="p-4 flex items-center gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-text truncate">{item.name}</h3>
+                      <p className="text-primary font-bold mt-1">{item.price} MRU</p>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="w-8 h-8 rounded bg-surface-2 flex items-center justify-center text-sm font-bold">
+                        {item.quantity}x
+                      </span>
+                      <button className="text-danger p-2 min-h-[44px] min-w-[44px] hover:bg-danger/10 rounded-lg transition-colors flex items-center justify-center">
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="divide-y divide-border">
-              {cartItems.map(item => (
-                <div key={item.id} className="p-4 flex items-center gap-4">
-                  <div className="flex-1">
-                    <h3 className="font-bold text-text">{item.name}</h3>
-                    <p className="text-primary font-bold mt-1">{item.price} MRU</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded bg-surface-2 flex items-center justify-center text-sm font-bold">
-                      {item.quantity}x
-                    </span>
-                    <button className="text-danger p-2 hover:bg-danger/10 rounded-lg transition-colors">
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              ))}
+
+            {/* Address */}
+            <div className="bg-surface rounded-2xl shadow-sm border border-border p-4">
+              <div className="flex items-center gap-2 mb-3 text-text font-medium">
+                <MapPin size={18} className="text-primary" /> Adresse de livraison
+              </div>
+              <textarea 
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                rows={2}
+                className="w-full bg-surface-2 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary outline-none text-text"
+              />
             </div>
           </div>
 
-          {/* Address */}
-          <div className="bg-surface rounded-2xl shadow-sm border border-border p-4">
-            <div className="flex items-center gap-2 mb-3 text-text font-medium">
-              <MapPin size={18} className="text-primary" /> Adresse de livraison
-            </div>
-            <textarea 
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              rows={2}
-              className="w-full bg-surface-2 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary outline-none text-text"
-            />
-          </div>
-
-          {/* Bill details */}
-          <div className="bg-surface rounded-2xl shadow-sm border border-border p-4 space-y-3">
-            <div className="flex justify-between text-sm text-muted">
-              <span>Sous-total</span>
-              <span className="text-text font-medium">{subtotal} MRU</span>
-            </div>
-            <div className="flex justify-between text-sm text-muted">
-              <span>Frais de livraison</span>
-              <span className="text-text font-medium">{deliveryFee} MRU</span>
-            </div>
-            <div className="h-px w-full bg-border my-2"></div>
-            <div className="flex justify-between font-bold text-lg text-text">
-              <span>Total</span>
-              <span className="text-primary">{total} MRU</span>
+          {/* Right column - Bill details */}
+          <div className="lg:w-80 shrink-0">
+            <div className="bg-surface rounded-2xl shadow-sm border border-border p-4 space-y-3 lg:sticky lg:top-24">
+              <div className="flex justify-between text-sm text-muted">
+                <span>{t('cart.subtotal')}</span>
+                <span className="text-text font-medium">{subtotal} MRU</span>
+              </div>
+              <div className="flex justify-between text-sm text-muted">
+                <span>{t('cart.delivery')}</span>
+                <span className="text-text font-medium">{deliveryFee} MRU</span>
+              </div>
+              <div className="h-px w-full bg-border my-2"></div>
+              <div className="flex justify-between font-bold text-lg text-text">
+                <span>{t('cart.total')}</span>
+                <span className="text-primary">{total} MRU</span>
+              </div>
+              <button 
+                onClick={handleCheckout}
+                disabled={loading}
+                className="w-full bg-primary text-primary-foreground py-4 min-h-[44px] rounded-2xl font-bold text-lg hover:bg-primary-strong transition-colors shadow-lg shadow-primary/25 disabled:opacity-50 mt-2"
+              >
+                {loading ? t('cart.checkout') : `${t('cart.checkout')} • ${total} MRU`}
+              </button>
             </div>
           </div>
 
         </div>
       )}
 
-      {/* Checkout Bar */}
-      {cartItems.length > 0 && (
-        <div className="fixed bottom-[65px] sm:bottom-0 left-0 right-0 sm:left-64 bg-surface border-t border-border p-4 shadow-[0_-4px_10px_rgb(0,0,0,0.05)]">
-          <div className="max-w-md mx-auto sm:max-w-xl md:max-w-3xl lg:max-w-5xl">
-            <button 
-              onClick={handleCheckout}
-              disabled={loading}
-              className="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg hover:bg-primary-strong transition-colors shadow-lg shadow-primary/25 disabled:opacity-50"
-            >
-              {loading ? 'Traitement...' : `Commander • ${total} MRU`}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Checkout moved into bill details for responsive layout */}
 
     </div>
   );

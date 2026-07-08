@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { Store, ChevronLeft, Search, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 
 interface Product {
@@ -19,6 +20,7 @@ interface Category {
 }
 
 export function ClientStoreView() {
+  const { t } = useTranslation('client');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
@@ -93,8 +95,8 @@ export function ClientStoreView() {
                 activeCategory === 'all' ? 'bg-text text-surface' : 'bg-surface-2 text-muted hover:text-text'
               }`}
             >
-              Tout
-            </button>
+                Tout
+              </button>
             {categories.map(cat => (
               <button
                 key={cat.id}
@@ -141,14 +143,14 @@ export function ClientStoreView() {
               <div className="flex flex-col items-center gap-3">
                 <div className="w-24 h-24 bg-surface-2 rounded-xl border border-border flex items-center justify-center overflow-hidden shrink-0">
                   {product.image_url ? (
-                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                    <img loading="lazy" src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                   ) : (
                     <Store className="text-faint" size={24} />
                   )}
                 </div>
                 {/* Note: The cart logic will be connected later */}
                 <button className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-medium py-1.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-1">
-                  <Plus size={16} /> Ajouter
+                  <Plus size={16} /> {t('storeView.addToCart')}
                 </button>
               </div>
             </div>

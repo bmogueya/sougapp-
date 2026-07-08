@@ -4,8 +4,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { User, LogOut, Package, Store } from 'lucide-react';
 import { formatMRU, cn } from '../../lib/utils';
 import { getOrderStatusMeta, ORDER_STATUS_TONE_CLASS } from '../../lib/orderStatus';
+import { useTranslation } from 'react-i18next';
 
 export function ClientProfile() {
+  const { t } = useTranslation('client');
   const { user, signOut } = useAuth();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +42,7 @@ export function ClientProfile() {
     <div className="p-4 space-y-6 pb-24 animate-in fade-in duration-500">
       
       {/* Profile Header */}
-      <div className="bg-surface p-6 rounded-3xl border border-border flex items-center gap-4">
+      <div className="bg-surface p-6 rounded-3xl border border-border flex flex-col md:flex-row items-center gap-4 text-center md:text-start">
         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
           <User size={32} className="text-primary" />
         </div>
@@ -54,7 +56,7 @@ export function ClientProfile() {
       <div>
         <h2 className="font-bold text-lg text-text mb-4 flex items-center gap-2">
           <Package size={20} className="text-primary" />
-          Mes Commandes
+          {t('profile.orders')}
         </h2>
         
         {loading ? (
@@ -62,7 +64,7 @@ export function ClientProfile() {
         ) : orders.length === 0 ? (
           <div className="text-center py-10 bg-surface rounded-3xl border border-border border-dashed">
             <Package size={40} className="mx-auto text-faint mb-3" />
-            <p className="text-muted font-medium">Aucune commande pour le moment.</p>
+            <p className="text-muted font-medium">{t('profile.noOrders')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -81,7 +83,7 @@ export function ClientProfile() {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-surface-2 flex items-center justify-center overflow-hidden shrink-0">
                     {order.stores?.logo ? (
-                      <img src={order.stores.logo} alt="" className="w-full h-full object-cover" />
+                      <img loading="lazy" src={order.stores.logo} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <Store size={20} className="text-faint" />
                     )}
@@ -106,7 +108,7 @@ export function ClientProfile() {
           className="w-full flex items-center justify-center gap-2 py-4 bg-danger/10 text-danger font-bold rounded-2xl hover:bg-danger/20 transition-colors"
         >
           <LogOut size={20} />
-          Se déconnecter
+          {t('profile.logout')}
         </button>
       </div>
 

@@ -1,0 +1,43 @@
+{
+  "home": {
+    "title": "SougApp",
+    "nearbyStores": "Nearby stores",
+    "categories": "Categories",
+    "featuredStores": "Featured stores",
+    "seeAll": "See all",
+    "noResults": "No results found"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search…",
+    "stores": "Stores",
+    "products": "Products",
+    "noStores": "No stores found",
+    "noProducts": "No products found"
+  },
+  "storeView": {
+    "products": "Products",
+    "about": "About",
+    "addToCart": "Add to cart",
+    "deliveryTime": "Delivery time",
+    "minOrder": "Minimum order"
+  },
+  "cart": {
+    "title": "My cart",
+    "empty": "Your cart is empty",
+    "emptyCTA": "Browse our stores",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "total": "Total",
+    "checkout": "Checkout",
+    "itemAdded": "Product added to cart",
+    "itemRemoved": "Product removed from cart"
+  },
+  "profile": {
+    "title": "My profile",
+    "orders": "My orders",
+    "addresses": "My addresses",
+    "logout": "Logout",
+    "noOrders": "No orders yet"
+  }
+}

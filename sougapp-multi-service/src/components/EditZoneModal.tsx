@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Modal } from './Modal';
 import { supabase } from '../lib/supabase';
+import { zoneSchema } from '../lib/schemas';
 
 interface Zone {
   id: number;
@@ -45,6 +46,13 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
     setLoading(true);
     setError(null);
 
+    const result = zoneSchema.safeParse(formData);
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
+
     const { error: updateError } = await supabase
       .from('zones')
       .update({ 
@@ -69,7 +77,7 @@ export function EditZoneModal({ isOpen, onClose, onSuccess, zone }: EditZoneModa
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Modifier la Zone">
       {error && (
-        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
           {error}
         </div>
       )}

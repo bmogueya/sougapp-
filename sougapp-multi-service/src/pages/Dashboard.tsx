@@ -81,7 +81,7 @@ export function Dashboard() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-[1440px] space-y-6">
+    <div className="mx-auto max-w-[1440px] space-y-6 overflow-hidden">
       <ConsoleHeader />
       <LedgerStrip kpis={KPIS} lang={lang} />
       <MarketBoard rows={ranked} lang={lang} />

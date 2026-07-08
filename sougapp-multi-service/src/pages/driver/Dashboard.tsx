@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { Navigation, MapPin, CheckCircle, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function DriverDashboard() {
+  const { t } = useTranslation('driver');
   const { user } = useAuth();
   const [isOnline, setIsOnline] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
@@ -87,7 +89,7 @@ export function DriverDashboard() {
         </div>
         <div>
           <h2 className="text-xl font-bold text-text mb-1">
-            {isOnline ? 'Vous êtes en ligne' : 'Vous êtes hors ligne'}
+            {isOnline ? t('dashboard.online') : t('dashboard.offline')}
           </h2>
           <p className="text-sm text-muted">
             {isOnline ? 'Prêt à recevoir des commandes.' : 'Passez en ligne pour travailler.'}
@@ -105,10 +107,10 @@ export function DriverDashboard() {
 
       {/* Orders List */}
       {isOnline && (
-        <div className="space-y-4">
+        <div className="overflow-x-auto -mx-4 px-4 space-y-4">
           <h3 className="font-bold text-text flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            Missions disponibles
+            {t('dashboard.missions')}
           </h3>
 
           {loading ? (
@@ -116,7 +118,7 @@ export function DriverDashboard() {
           ) : orders.length === 0 ? (
             <div className="bg-surface border border-border border-dashed rounded-2xl p-8 text-center">
               <Clock size={40} className="mx-auto text-faint mb-3" />
-              <p className="text-muted font-medium">Aucune course pour le moment.</p>
+              <p className="text-muted font-medium">{t('dashboard.noMissions')}</p>
               <p className="text-sm text-faint mt-1">Nous vous avertirons dès qu'une commande sera prête.</p>
             </div>
           ) : (
@@ -163,7 +165,7 @@ export function DriverDashboard() {
                       onClick={() => handleAcceptOrder(order.id)}
                       className="w-full bg-text text-surface py-3 rounded-xl font-bold hover:bg-black transition-colors"
                     >
-                      Accepter la course
+                      {t('dashboard.accept')}
                     </button>
                   ) : (
                     <button 

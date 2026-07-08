@@ -1,0 +1,31 @@
+{
+  "dashboard": {
+    "title": "Tableau de bord",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "missions": "Missions",
+    "earnings": "Revenus",
+    "newMission": "Nouvelle mission",
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "noMissions": "Aucune mission en cours",
+    "todayEarnings": "Gains du jour",
+    "cashInHand": "Espèces en main"
+  },
+  "history": {
+    "title": "Historique",
+    "completedMissions": "Missions terminées",
+    "date": "Date",
+    "amount": "Montant",
+    "noHistory": "Aucun historique disponible"
+  },
+  "profile": {
+    "title": "Mon profil",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "zone": "Zone",
+    "totalMissions": "Total missions",
+    "rating": "Note",
+    "logout": "Déconnexion"
+  }
+}

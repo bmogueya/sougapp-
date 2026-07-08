@@ -1,0 +1,43 @@
+{
+  "home": {
+    "title": "SougApp",
+    "nearbyStores": "Stores à proximité",
+    "categories": "Catégories",
+    "featuredStores": "Stores en vedette",
+    "seeAll": "Voir tout",
+    "noResults": "Aucun résultat trouvé"
+  },
+  "search": {
+    "title": "Recherche",
+    "placeholder": "Rechercher…",
+    "stores": "Stores",
+    "products": "Produits",
+    "noStores": "Aucun store trouvé",
+    "noProducts": "Aucun produit trouvé"
+  },
+  "storeView": {
+    "products": "Produits",
+    "about": "À propos",
+    "addToCart": "Ajouter au panier",
+    "deliveryTime": "Temps de livraison",
+    "minOrder": "Commande minimum"
+  },
+  "cart": {
+    "title": "Mon panier",
+    "empty": "Votre panier est vide",
+    "emptyCTA": "Découvrir nos stores",
+    "subtotal": "Sous-total",
+    "delivery": "Livraison",
+    "total": "Total",
+    "checkout": "Commander",
+    "itemAdded": "Produit ajouté au panier",
+    "itemRemoved": "Produit retiré du panier"
+  },
+  "profile": {
+    "title": "Mon profil",
+    "orders": "Mes commandes",
+    "addresses": "Mes adresses",
+    "logout": "Déconnexion",
+    "noOrders": "Aucune commande pour le moment"
+  }
+}

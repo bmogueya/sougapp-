@@ -2,41 +2,39 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Search as SearchIcon, Store, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useDebounce } from '../../lib/hooks/useDebounce';
 
 export function ClientSearch() {
+  const { t } = useTranslation('client');
   const [query, setQuery] = useState('');
   const [stores, setStores] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const debouncedQuery = useDebounce(query, 500);
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (query.trim()) {
-        performSearch();
-      } else {
-        setStores([]);
-        setProducts([]);
-      }
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+    if (debouncedQuery.trim()) {
+      performSearch();
+    } else {
+      setStores([]);
+      setProducts([]);
+    }
+  }, [debouncedQuery]);
 
   const performSearch = async () => {
     setLoading(true);
     
-    // Search stores
     const { data: storesData } = await supabase
       .from('stores')
       .select('id, name, logo, address, is_open')
-      .ilike('name', `%${query}%`)
+      .ilike('name', `%${debouncedQuery}%`)
       .limit(5);
 
-    // Search products (assuming products have a name and store_id)
     const { data: productsData } = await supabase
       .from('products')
       .select('id, name, price, store_id, stores(name)')
-      .ilike('name', `%${query}%`)
+      .ilike('name', `%${debouncedQuery}%`)
       .limit(10);
 
     setStores(storesData || []);
@@ -57,7 +55,7 @@ export function ClientSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="block w-full pl-10 pr-3 py-4 border-none rounded-2xl bg-surface shadow-sm focus:ring-2 focus:ring-primary focus:outline-none text-text text-lg"
-          placeholder="Plats, restaurants, articles..."
+          placeholder={t('search.placeholder')}
         />
         {loading && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -67,9 +65,9 @@ export function ClientSearch() {
       </div>
 
       {/* Results */}
-      {query.trim() !== '' && !loading && stores.length === 0 && products.length === 0 && (
+      {debouncedQuery.trim() !== '' && !loading && stores.length === 0 && products.length === 0 && (
         <div className="text-center py-10 text-muted">
-          <p>Aucun résultat pour "{query}"</p>
+          <p>{t('search.noProducts')}</p>
         </div>
       )}
 
@@ -77,7 +75,7 @@ export function ClientSearch() {
         <div className="space-y-3">
           <h2 className="font-bold text-lg text-text flex items-center gap-2">
             <Store size={20} className="text-primary" />
-            Boutiques
+            {t('search.stores')}
           </h2>
           <div className="grid gap-3">
             {stores.map(store => (
@@ -88,7 +86,7 @@ export function ClientSearch() {
               >
                 <div className="w-12 h-12 rounded-xl bg-surface-2 flex items-center justify-center shrink-0 overflow-hidden">
                   {store.logo ? (
-                    <img src={store.logo} alt={store.name} className="w-full h-full object-cover" />
+                    <img loading="lazy" src={store.logo} alt={store.name} className="w-full h-full object-cover" />
                   ) : (
                     <Store size={24} className="text-faint" />
                   )}
@@ -107,7 +105,7 @@ export function ClientSearch() {
         <div className="space-y-3">
           <h2 className="font-bold text-lg text-text flex items-center gap-2">
             <Package size={20} className="text-primary" />
-            Produits
+            {t('search.products')}
           </h2>
           <div className="grid gap-3">
             {products.map(product => (
@@ -118,7 +116,7 @@ export function ClientSearch() {
               >
                 <div>
                   <h3 className="font-bold text-text text-sm">{product.name}</h3>
-                  <p className="text-xs text-muted">Chez {product.stores?.name}</p>
+                  <p className="text-xs text-muted">{product.stores?.name}</p>
                 </div>
                 <div className="font-bold text-primary text-sm whitespace-nowrap">
                   {product.price} MRU
@@ -132,8 +130,8 @@ export function ClientSearch() {
       {query === '' && (
         <div className="text-center py-10">
           <SearchIcon size={48} className="mx-auto text-faint mb-4" />
-          <h3 className="text-lg font-bold text-text mb-2">Que recherchez-vous ?</h3>
-          <p className="text-muted text-sm px-8">Cherchez vos restaurants préférés, des médicaments ou vos courses du quotidien.</p>
+          <h3 className="text-lg font-bold text-text mb-2">{t('search.title')}</h3>
+          <p className="text-muted text-sm px-8">{t('search.placeholder')}</p>
         </div>
       )}
     </div>

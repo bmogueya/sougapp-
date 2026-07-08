@@ -3,8 +3,10 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { Clock, MapPin, CheckCircle } from 'lucide-react';
 import { formatMRU } from '../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export function DriverHistory() {
+  const { t } = useTranslation('driver');
   const { user } = useAuth();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ export function DriverHistory() {
     <div className="p-4 space-y-6 pb-24 animate-in fade-in duration-500">
       <div className="flex items-center gap-3 mb-6">
         <Clock className="text-primary" size={24} />
-        <h1 className="text-xl font-bold text-text">Historique des courses</h1>
+        <h1 className="text-xl font-bold text-text">{t('history.title')}</h1>
       </div>
 
       {loading ? (
@@ -39,7 +41,7 @@ export function DriverHistory() {
       ) : orders.length === 0 ? (
         <div className="bg-surface border border-border border-dashed rounded-3xl p-8 text-center">
           <CheckCircle size={40} className="mx-auto text-faint mb-3" />
-          <p className="text-muted font-medium">Aucune course terminée.</p>
+          <p className="text-muted font-medium">{t('history.noHistory')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -48,7 +50,7 @@ export function DriverHistory() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <span className="text-xs font-bold text-success bg-success/10 px-2 py-1 rounded-md uppercase tracking-wider">
-                    Terminée
+                    {t('history.completedMissions')}
                   </span>
                   <p className="text-xs text-muted mt-2">
                     {new Date(order.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}

@@ -1,0 +1,50 @@
+{
+  "date": "2026-07-06",
+  "url": "http://localhost:5173",
+  "designScore": "B+",
+  "previousScore": "C+",
+  "aiSlopScore": "A",
+  "categoryGrades": {
+    "hierarchy": "A-",
+    "typography": "A",
+    "spacing": "B",
+    "color": "A-",
+    "interactions": "B+",
+    "responsive": "B",
+    "content": "B+",
+    "aiSlop": "A",
+    "motion": "B+",
+    "performance": "B"
+  },
+  "fixedCount": 15,
+  "fixCommits": [
+    "53d0cb3 — FINDING-003/004/010: login form a11y, autocomplete, placeholders",
+    "da465e8 — FINDING-005: sidebar active route state",
+    "d6569bb — FINDING-007: focus:ring-blue-500 → focus:ring-primary (10 files)",
+    "bca4709 — FINDING-011: standardize card border-radius to rounded-2xl",
+    "243d068 — FINDING-001: migrate all pages and modals to CSS variable theme",
+    "2ae8b5c — FINDING-002: create DESIGN.md documenting Desert Night system",
+    "f361996 — FINDING-008: add password reset flow with email form",
+    "4001a25 — FINDING-009: add mobile nav collapse with hamburger menu",
+    "a14868a — FINDING-012: add visual icons to empty states and loading spinner",
+    "5b58dd1 — FINDING-013: add brand crescent+star logo to login page",
+    "dc3c170 — FINDING-006: code-split pages and defer Google Fonts load"
+  ],
+  "findings": [
+    { "id": "FINDING-001", "title": "Design system inconsistency — half the app uses hardcoded slate colors", "impact": "high", "category": "color", "fixed": true },
+    { "id": "FINDING-002", "title": "DESIGN.md outdated (Inter font, Navy palette vs actual IBM Plex + Green/Gold)", "impact": "high", "category": "documentation", "fixed": true },
+    { "id": "FINDING-003", "title": "Login form labels not associated with inputs", "impact": "high", "category": "interactions", "fixed": true },
+    { "id": "FINDING-004", "title": "No autocomplete on login form", "impact": "medium", "category": "interactions", "fixed": true },
+    { "id": "FINDING-005", "title": "No active state on sidebar navigation", "impact": "medium", "category": "interactions", "fixed": true },
+    { "id": "FINDING-006", "title": "Login page load time 3.25s", "impact": "medium", "category": "performance", "fixed": true },
+    { "id": "FINDING-007", "title": "Focus ring uses blue-500 instead of theme primary", "impact": "medium", "category": "color", "fixed": true },
+    { "id": "FINDING-008", "title": "No password reset / forgot password flow", "impact": "medium", "category": "content", "fixed": true },
+    { "id": "FINDING-009", "title": "No mobile navigation collapse", "impact": "medium", "category": "responsive", "fixed": true },
+    { "id": "FINDING-010", "title": "Inputs lack placeholder text", "impact": "polish", "category": "content", "fixed": true },
+    { "id": "FINDING-011", "title": "Card border-radius inconsistency", "impact": "polish", "category": "spacing", "fixed": true },
+    { "id": "FINDING-012", "title": "Empty states are text-only", "impact": "polish", "category": "content", "fixed": true },
+    { "id": "FINDING-013", "title": "Login page has no logo/brand image", "impact": "polish", "category": "hierarchy", "fixed": true },
+    { "id": "FINDING-014", "title": "Hardcoded font-mono in chart component", "impact": "polish", "category": "typography", "fixed": true },
+    { "id": "FINDING-015", "title": "transition-all on buttons instead of specific properties", "impact": "polish", "category": "motion", "fixed": true }
+  ]
+}

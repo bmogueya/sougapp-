@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { Store, ChevronRight, Utensils, Pill, ShoppingBasket, Search } from 'lucide-react';
-
+import { useTranslation } from 'react-i18next';
 
 export function ClientHome() {
+  const { t } = useTranslation('client');
   const [stores, setStores] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,17 +53,17 @@ export function ClientHome() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={20} />
         <input 
           type="text" 
-          placeholder="De quoi avez-vous besoin ?"
+          placeholder={t('search.placeholder')}
           className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface border-none shadow-[0_2px_10px_rgb(0,0,0,0.05)] focus:ring-2 focus:ring-primary outline-none font-medium text-text"
         />
       </div>
 
       {/* Modules (Categories) */}
       <section>
-        <h2 className="text-lg font-bold text-text mb-3">Que cherchez-vous ?</h2>
-        <div className="grid grid-cols-3 gap-3">
+        <h2 className="text-lg font-bold text-text mb-3">{t('home.categories')}</h2>
+        <div className="flex gap-3 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory -mx-4 px-4">
           {CATEGORIES.map(cat => (
-            <Link key={cat.id} to={`/app/search?module=${cat.id}`} className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-surface shadow-sm active:scale-95 transition-transform">
+            <Link key={cat.id} to={`/app/search?module=${cat.id}`} className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-surface shadow-sm active:scale-95 transition-transform shrink-0 snap-start w-[100px]">
               <div className="w-12 h-12 rounded-full flex items-center justify-center" style={MODULE_BG(cat.id)}>
                 {getModuleIcon(cat.icon)}
               </div>
@@ -75,9 +76,9 @@ export function ClientHome() {
       {/* Featured Stores */}
       <section className="pb-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold text-text">À la une</h2>
+          <h2 className="text-lg font-bold text-text">{t('home.featuredStores')}</h2>
           <Link to="/app/search" className="text-sm font-medium text-primary flex items-center">
-            Voir tout <ChevronRight size={16} />
+            {t('home.seeAll')} <ChevronRight size={16} />
           </Link>
         </div>
 
@@ -90,10 +91,10 @@ export function ClientHome() {
         ) : stores.length === 0 ? (
           <div className="text-center py-10 bg-surface rounded-2xl border border-border border-dashed">
             <Store size={40} className="mx-auto text-faint mb-2" />
-            <p className="text-muted font-medium">Aucun magasin ouvert pour le moment.</p>
+            <p className="text-muted font-medium">{t('home.noResults')}</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {stores.map(store => (
               <Link 
                 key={store.id} 

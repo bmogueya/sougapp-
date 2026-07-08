@@ -84,28 +84,30 @@ export function Zones() {
               ) : (
                 zones.map((zone) => (
                   <tr key={zone.id} className="border-b border-border hover:bg-surface-2 transition-colors">
-                    <td className="px-6 py-4">
+                    <td data-label="Zone" className="px-6 py-4">
+                      <span className="sm:hidden text-xs text-muted font-medium block mb-1">Zone</span>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-faint">
+                        <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-faint shrink-0">
                           <Map size={18} />
                         </div>
                         <div className="font-medium text-text">{zone.name}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td data-label="Statut" className="px-6 py-4">
+                      <span className="sm:hidden text-xs text-muted font-medium block mb-1">Statut</span>
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium
                         ${zone.status === 'active' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}
                       >
                         {zone.status === 'active' ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td data-label="Actions" className="px-6 py-4 text-center">
                       <button 
                         onClick={() => {
                           setSelectedZone(zone);
                           setIsEditModalOpen(true);
                         }}
-                        className="text-primary hover:text-primary-strong text-sm font-medium"
+                        className="text-primary hover:text-primary-strong text-sm font-medium min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                       >
                         Modifier
                       </button>

@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { loginSchema } from '../lib/schemas';
 
 export function Login() {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,7 +19,14 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -50,8 +60,8 @@ export function Login() {
   if (showResetForm) {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center p-4">
-        <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
-          <div className="text-center mb-8">
+        <div className="bg-surface p-6 sm:p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
+          <div className="text-center mb-6 sm:mb-8">
             <div className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
               <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
                 <path d="M50 10 C28 10 10 28 10 50 C10 72 28 90 50 90 C72 90 85 72 85 50 C85 28 72 10 50 10Z" fill="currentColor" opacity="0.3"/>
@@ -59,12 +69,12 @@ export function Login() {
                 <path d="M55 52 L58 46 L62 52 L69 53 L63 58 L65 65 L58 61 L51 65 L53 58 L47 53 L55 52Z" fill="#C28A2E"/>
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-text">Réinitialisation</h1>
+            <h1 className="text-2xl font-bold text-text">{t('reset.title')}</h1>
             <p className="text-muted mt-2">Recevez un lien pour réinitialiser votre mot de passe</p>
           </div>
 
           {error && (
-            <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+            <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
               {error}
             </div>
           )}
@@ -72,20 +82,20 @@ export function Login() {
           {resetSent ? (
             <div className="text-center space-y-4">
               <div className="bg-success/10 text-success p-4 rounded-lg text-sm">
-                Si un compte existe avec cette adresse, un email de réinitialisation vous a été envoyé.
+                {t('reset.sent')}
               </div>
               <button
                 onClick={() => { setShowResetForm(false); setResetSent(false); setError(null); }}
                 className="text-primary hover:text-primary-strong text-sm font-medium transition-colors"
               >
-                Retour à la connexion
+                {t('reset.back')}
               </button>
             </div>
           ) : (
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div>
                 <label htmlFor="reset-email" className="block text-sm font-medium text-text mb-1">
-                  Email
+                  {t('login.emailLabel')}
                 </label>
                 <input
                   id="reset-email"
@@ -94,7 +104,7 @@ export function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@sougapp.mr"
                   autoComplete="email"
-                  className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                   className="w-full px-4 py-3 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
                   required
                 />
               </div>
@@ -102,9 +112,9 @@ export function Login() {
               <button
                 type="submit"
                 disabled={resetLoading}
-                className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:bg-primary-strong transition-colors disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground font-medium py-3 min-h-[44px] rounded-lg hover:bg-primary-strong transition-colors disabled:opacity-50"
               >
-                {resetLoading ? 'Envoi...' : 'Envoyer le lien'}
+                {resetLoading ? 'Envoi...' : t('reset.submit')}
               </button>
 
               <button
@@ -112,7 +122,7 @@ export function Login() {
                 onClick={() => { setShowResetForm(false); setError(null); }}
                 className="w-full text-muted hover:text-text text-sm font-medium transition-colors text-center"
               >
-                Retour à la connexion
+                {t('reset.back')}
               </button>
             </form>
           )}
@@ -123,8 +133,8 @@ export function Login() {
 
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
-      <div className="bg-surface p-8 rounded-2xl shadow-card w-full max-w-md border border-border">
-        <div className="text-center mb-8">
+      <div className="bg-surface p-6 sm:p-8 rounded-2xl shadow-card w-full max-w-sm mx-auto border border-border">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
             <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
               <path d="M50 10 C28 10 10 28 10 50 C10 72 28 90 50 90 C72 90 85 72 85 50 C85 28 72 10 50 10Z" fill="currentColor" opacity="0.3"/>
@@ -137,7 +147,7 @@ export function Login() {
         </div>
 
         {error && (
-          <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+          <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
             {error}
           </div>
         )}
@@ -145,7 +155,7 @@ export function Login() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="login-email" className="block text-sm font-medium text-text mb-1">
-              Email
+              {t('login.emailLabel')}
             </label>
             <input
               id="login-email"
@@ -154,14 +164,14 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@sougapp.mr"
               autoComplete="email"
-              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+              className="w-full px-4 py-3 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
               required
             />
           </div>
 
           <div>
             <label htmlFor="login-password" className="block text-sm font-medium text-text mb-1">
-              Mot de passe
+              {t('login.passwordLabel')}
             </label>
             <input
               id="login-password"
@@ -170,7 +180,7 @@ export function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               autoComplete="current-password"
-              className="w-full px-4 py-2 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+              className="w-full px-4 py-3 border border-border bg-surface text-text rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
               required
             />
           </div>
@@ -181,7 +191,7 @@ export function Login() {
               onClick={() => setShowResetForm(true)}
               className="text-sm text-primary hover:text-primary-strong transition-colors"
             >
-              Mot de passe oublié ?
+              {t('login.forgotPassword')}
             </button>
           </div>
 
@@ -190,7 +200,7 @@ export function Login() {
             disabled={loading}
             className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:bg-primary-strong transition-colors disabled:opacity-50"
           >
-            {loading ? 'Connexion...' : 'Se connecter'}
+            {loading ? t('login.loggingIn') : t('login.submit')}
           </button>
         </form>
       </div>

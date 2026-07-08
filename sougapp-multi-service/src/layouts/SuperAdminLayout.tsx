@@ -10,8 +10,8 @@ export function SuperAdminLayout() {
     <div className="min-h-screen bg-bg flex">
       <Sidebar sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col ltr:ml-0 lg:ltr:ml-64 rtl:mr-0 lg:rtl:mr-64">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-6">
+        <Header onMenuClick={() => setSidebarOpen(true)} sidebarOpen={sidebarOpen} />
+        <main id="main-content" className="flex-1 p-6">
           <Outlet />
         </main>
       </div>

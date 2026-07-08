@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -5,9 +6,10 @@ import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   onMenuClick: () => void;
+  sidebarOpen?: boolean;
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
+const Header = memo(function Header({ onMenuClick, sidebarOpen }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
 
@@ -25,6 +27,8 @@ export function Header({ onMenuClick }: HeaderProps) {
           onClick={onMenuClick}
           className="lg:hidden p-2 rounded-lg text-muted hover:text-text hover:bg-surface-2 transition-colors"
           aria-label="Menu"
+          aria-expanded={sidebarOpen}
+          aria-controls="sidebar-menu"
         >
           <Menu size={20} />
         </button>
@@ -59,4 +63,6 @@ export function Header({ onMenuClick }: HeaderProps) {
       </div>
     </header>
   );
-}
+});
+
+export { Header };

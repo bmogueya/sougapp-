@@ -234,6 +234,7 @@ export function MerchantProducts() {
                     <td className="px-6 py-4">
                       {product.image_url ? (
                         <img
+                          loading="lazy"
                           src={product.image_url}
                           alt={product.name}
                           className="h-12 w-12 rounded-xl border border-border object-cover"

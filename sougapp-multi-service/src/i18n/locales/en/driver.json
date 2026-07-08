@@ -1,0 +1,31 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "online": "Online",
+    "offline": "Offline",
+    "missions": "Missions",
+    "earnings": "Earnings",
+    "newMission": "New mission",
+    "accept": "Accept",
+    "decline": "Decline",
+    "noMissions": "No active missions",
+    "todayEarnings": "Today's earnings",
+    "cashInHand": "Cash in hand"
+  },
+  "history": {
+    "title": "History",
+    "completedMissions": "Completed missions",
+    "date": "Date",
+    "amount": "Amount",
+    "noHistory": "No history available"
+  },
+  "profile": {
+    "title": "My profile",
+    "name": "Name",
+    "phone": "Phone",
+    "zone": "Zone",
+    "totalMissions": "Total missions",
+    "rating": "Rating",
+    "logout": "Logout"
+  }
+}

@@ -1,0 +1,240 @@
+[2026-07-06T00:58:30.335Z] [debug] [vite] connecting...
+[2026-07-06T00:58:30.384Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-07-06T00:58:30.477Z] [debug] [vite] connected.
+[2026-07-06T01:02:56.240Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:02:56.240Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:03:03.318Z] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2026-07-06T01:03:03.318Z] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2026-07-06T01:03:03.368Z] [error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2026-07-06T01:03:03.386Z] [error] [vite] Failed to reload /src/pages/Login.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2026-07-06T01:03:03.386Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:03:03.386Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:03:03.386Z] [log] [vite] server connection lost. Polling for restart...
+[2026-07-06T01:04:44.836Z] [debug] [vite] connecting...
+[2026-07-06T01:04:44.854Z] [debug] [vite] connected.
+[2026-07-06T01:04:44.894Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-07-06T01:04:54.404Z] [debug] [vite] connecting...
+[2026-07-06T01:04:54.429Z] [debug] [vite] connected.
+[2026-07-06T01:04:54.462Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-07-06T01:07:51.844Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:07:51.844Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:07:55.745Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:07:55.745Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:00.229Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:08:00.229Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:04.515Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:08:04.515Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:08.485Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:08:08.485Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:15.870Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:08:15.870Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:24.161Z] [debug] [vite] hot updated: /src/components/ProtectedRoute.tsx
+[2026-07-06T01:08:24.161Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:29.882Z] [debug] [vite] hot updated: /src/components/ProtectedRoute.tsx
+[2026-07-06T01:08:29.882Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:36.198Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:36.198Z] [debug] [vite] hot updated: /src/components/Sidebar.tsx
+[2026-07-06T01:08:42.265Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:42.265Z] [debug] [vite] hot updated: /src/components/Header.tsx
+[2026-07-06T01:08:46.237Z] [debug] [vite] hot updated: /src/layouts/SuperAdminLayout.tsx
+[2026-07-06T01:08:46.237Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:08:59.237Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:08:59.237Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:04.930Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:09:04.930Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:10.612Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:09:10.613Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:15.043Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:09:15.043Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:19.216Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:09:19.216Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:23.978Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:09:23.978Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:29.458Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:09:29.458Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:33.221Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:09:33.221Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:38.855Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:09:38.855Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:09:45.062Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:09:45.062Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:08.159Z] [debug] [vite] hot updated: /src/pages/Finance.tsx
+[2026-07-06T01:10:08.159Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:21.671Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:21.672Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:25.423Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:25.423Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:29.642Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:29.642Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:35.475Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:35.475Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:39.693Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:39.693Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:44.217Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:44.217Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:48.606Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:10:48.606Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:10:58.116Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:10:58.116Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:07.020Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:07.020Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:10.992Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:10.992Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:15.019Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:15.019Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:19.126Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:19.126Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:23.044Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:23.044Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:27.011Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:27.011Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:46.347Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:46.347Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:52.814Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:52.814Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:11:56.608Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:11:56.608Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:00.589Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:00.589Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:04.092Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:04.092Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:07.296Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:07.297Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:11.215Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:11.215Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:14.495Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:14.495Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:17.782Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:17.782Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:20.960Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:20.960Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:24.346Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:24.346Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:27.493Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:12:27.493Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:33.956Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:33.956Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:39.208Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:39.208Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:43.084Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:43.084Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:48.362Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:48.362Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:54.393Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:54.393Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:12:58.061Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:12:58.061Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:02.725Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:13:02.725Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:07.227Z] [debug] [vite] hot updated: /src/pages/Settings.tsx
+[2026-07-06T01:13:07.227Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:21.667Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:21.667Z] [debug] [vite] hot updated: /src/components/UserModal.tsx
+[2026-07-06T01:13:29.331Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:29.331Z] [debug] [vite] hot updated: /src/components/UserModal.tsx
+[2026-07-06T01:13:39.104Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:39.104Z] [debug] [vite] hot updated: /src/components/UserModal.tsx
+[2026-07-06T01:13:47.523Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:47.523Z] [debug] [vite] hot updated: /src/components/EditUserModal.tsx
+[2026-07-06T01:13:55.533Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:13:55.533Z] [debug] [vite] hot updated: /src/components/MerchantModal.tsx
+[2026-07-06T01:14:04.315Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:14:04.315Z] [debug] [vite] hot updated: /src/components/EditMerchantModal.tsx
+[2026-07-06T01:14:10.944Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:14:10.944Z] [debug] [vite] hot updated: /src/components/ZoneModal.tsx
+[2026-07-06T01:14:17.911Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:14:17.911Z] [debug] [vite] hot updated: /src/components/EditZoneModal.tsx
+[2026-07-06T01:15:58.423Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:15:58.423Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:03.056Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:16:03.056Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:08.159Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:16:08.159Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:11.594Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:11.594Z] [debug] [vite] hot updated: /src/components/Modal.tsx
+[2026-07-06T01:16:17.404Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:17.404Z] [debug] [vite] hot updated: /src/components/Modal.tsx
+[2026-07-06T01:16:20.694Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:24.848Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:28.477Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:16:32.124Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:16:32.124Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:19:05.477Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:19:05.477Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:19:13.094Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:19:13.094Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:19:16.955Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:19:16.955Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:20:01.487Z] [debug] [vite] hot updated: /src/layouts/SuperAdminLayout.tsx
+[2026-07-06T01:20:01.487Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:20:12.133Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:20:12.133Z] [debug] [vite] hot updated: /src/components/Sidebar.tsx
+[2026-07-06T01:20:16.981Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:20:16.981Z] [debug] [vite] hot updated: /src/components/Header.tsx
+[2026-07-06T01:20:21.703Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:20:21.703Z] [debug] [vite] hot updated: /src/components/Header.tsx
+[2026-07-06T01:22:21.085Z] [error] [vite] SyntaxError: Identifier 'Users' has already been declared
+[2026-07-06T01:22:21.085Z] [error] [vite] Failed to reload /src/pages/Users.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2026-07-06T01:22:21.086Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:22:21.086Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:26.224Z] [error] [vite] SyntaxError: Identifier 'Users' has already been declared
+[2026-07-06T01:22:26.224Z] [error] [vite] Failed to reload /src/pages/Users.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2026-07-06T01:22:26.224Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:22:26.225Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:30.547Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:22:30.547Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:35.608Z] [debug] [vite] hot updated: /src/pages/Drivers.tsx
+[2026-07-06T01:22:35.608Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:41.284Z] [debug] [vite] hot updated: /src/pages/Finance.tsx
+[2026-07-06T01:22:41.284Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:46.208Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:22:46.208Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:51.236Z] [debug] [vite] hot updated: /src/pages/Merchants.tsx
+[2026-07-06T01:22:51.236Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:22:56.147Z] [debug] [vite] hot updated: /src/pages/Zones.tsx
+[2026-07-06T01:22:56.147Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:00.653Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:23:00.653Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:10.768Z] [debug] [vite] hot updated: /src/pages/Modules.tsx
+[2026-07-06T01:23:10.768Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:15.599Z] [debug] [vite] hot updated: /src/components/ProtectedRoute.tsx
+[2026-07-06T01:23:15.599Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:20.033Z] [debug] [vite] hot updated: /src/pages/Orders.tsx
+[2026-07-06T01:23:20.033Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:30.434Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:23:30.434Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:23:33.787Z] [debug] [vite] hot updated: /src/pages/Users.tsx
+[2026-07-06T01:23:33.787Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:25:02.633Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:25:02.633Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:25:20.046Z] [debug] [vite] hot updated: /src/pages/Login.tsx
+[2026-07-06T01:25:20.046Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:27:08.548Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:27:08.548Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:27:13.583Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:27:13.583Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:27:25.459Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:27:25.459Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:27:39.601Z] [debug] [vite] connecting...
+[2026-07-06T01:27:39.606Z] [debug] [vite] connected.
+[2026-07-06T01:27:39.610Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-07-06T01:32:50.292Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:32:50.292Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:33:06.183Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:33:15.625Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:33:23.120Z] [debug] [vite] connecting...
+[2026-07-06T01:33:23.137Z] [debug] [vite] connected.
+[2026-07-06T01:33:23.296Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-07-06T01:34:53.681Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:34:53.681Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:35:06.869Z] [debug] [vite] hot updated: /src/components/ProtectedRoute.tsx
+[2026-07-06T01:35:06.869Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:35:16.883Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:35:16.883Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:37:01.425Z] [debug] [vite] hot updated: /src/App.tsx
+[2026-07-06T01:37:01.425Z] [debug] [vite] hot updated: /src/index.css
+[2026-07-06T01:37:01.451Z] [warning] %s
+
+%s
+ An error occurred in the <App> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.

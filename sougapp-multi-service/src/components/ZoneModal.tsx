@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal } from './Modal';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { zoneSchema } from '../lib/schemas';
 
 interface ZoneModalProps {
   isOpen: boolean;
@@ -30,6 +31,13 @@ export function ZoneModal({ isOpen, onClose, onSuccess }: ZoneModalProps) {
     setLoading(true);
     setError(null);
 
+    const result = zoneSchema.safeParse(formData);
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
+
     const { error: insertError } = await supabase
       .from('zones')
       .insert([{ name: formData.name, status: formData.status }]);
@@ -48,7 +56,7 @@ export function ZoneModal({ isOpen, onClose, onSuccess }: ZoneModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Ajouter une Zone">
       {error && (
-        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
           {error}
         </div>
       )}

@@ -20,7 +20,9 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-export function Sidebar({ sidebarOpen, onClose }: SidebarProps) {
+import { memo } from 'react';
+
+export const Sidebar = memo(function Sidebar({ sidebarOpen, onClose }: SidebarProps) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
 
@@ -34,7 +36,7 @@ export function Sidebar({ sidebarOpen, onClose }: SidebarProps) {
         />
       )}
 
-      <aside className={cn(
+      <aside id="sidebar-menu" className={cn(
         "w-64 bg-primary text-primary-foreground flex flex-col h-screen fixed top-0 z-50 transition-transform duration-200",
         "ltr:left-0 rtl:right-0",
         sidebarOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full",
@@ -73,4 +75,4 @@ export function Sidebar({ sidebarOpen, onClose }: SidebarProps) {
       </aside>
     </>
   );
-}
+});

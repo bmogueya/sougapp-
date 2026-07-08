@@ -132,7 +132,7 @@ export function MerchantLayout() {
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6">
+        <main id="main-content" className="flex-1 p-6">
           <Outlet />
         </main>
       </div>

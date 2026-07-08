@@ -1,11 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { Login } from './pages/Login';
+import * as Sentry from '@sentry/react';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './components/ui/Toast';
 
-import { SuperAdminLayout } from './layouts/SuperAdminLayout';
-import { MerchantLayout } from './layouts/MerchantLayout';
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
+const SuperAdminLayout = lazy(() => import('./layouts/SuperAdminLayout').then(m => ({ default: m.SuperAdminLayout })));
+const MerchantLayout = lazy(() => import('./layouts/MerchantLayout').then(m => ({ default: m.MerchantLayout })));
 
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 const Users = lazy(() => import('./pages/Users').then(m => ({ default: m.Users })));
@@ -82,7 +84,11 @@ function App() {
 
         {/* Routes protégées - Super Admin */}
         <Route element={<ProtectedRoute allowedRoles={['super_admin', 'dispatcher']} />}>
-          <Route path="/" element={<SuperAdminLayout />}>
+          <Route path="/" element={
+            <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+              <SuperAdminLayout />
+            </Suspense>
+          }>
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="drivers" element={<Drivers />} />
@@ -99,7 +105,11 @@ function App() {
 
         {/* Routes protégées - Merchant */}
         <Route element={<ProtectedRoute allowedRoles={['merchant']} />}>
-          <Route path="/merchant" element={<MerchantLayout />}>
+          <Route path="/merchant" element={
+            <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+              <MerchantLayout />
+            </Suspense>
+          }>
             <Route index element={<MerchantDashboard />} />
             <Route path="products" element={<MerchantProducts />} />
             <Route path="categories" element={<MerchantCategories />} />
@@ -130,10 +140,20 @@ function App() {
 
 export default function Root() {
   return (
-    <AuthProvider>
+    <Sentry.ErrorBoundary fallback={<div className="p-8 text-center text-text"><h2 className="text-lg font-medium mb-2">Une erreur est survenue</h2><p className="text-muted">Veuillez rafraîchir la page.</p></div>}>
+      <AuthProvider>
       <BrowserRouter>
-        <App />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:outline-2 focus:outline-primary"
+        >
+          Aller au contenu principal
+        </a>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </BrowserRouter>
     </AuthProvider>
+    </Sentry.ErrorBoundary>
   );
 }

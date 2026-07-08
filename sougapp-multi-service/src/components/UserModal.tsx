@@ -56,7 +56,7 @@ export function UserModal({ isOpen, onClose, onSuccess }: UserModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Ajouter un Utilisateur">
       {error && (
-        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
           {error}
         </div>
       )}

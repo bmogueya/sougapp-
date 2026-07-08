@@ -73,7 +73,7 @@ export function EditUserModal({ isOpen, onClose, onSuccess, userProfile }: EditU
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Modifier l'Utilisateur">
       {error && (
-        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm">
+        <div className="bg-danger/10 text-danger p-3 rounded-lg mb-6 text-sm" role="alert">
           {error}
         </div>
       )}

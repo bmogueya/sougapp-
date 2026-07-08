@@ -1,0 +1,7 @@
+{
+  "home": { "title": "سوق أب", "nearbyStores": "المتاجر القريبة", "categories": "التصنيفات", "featuredStores": "المتاجر المميزة", "seeAll": "عرض الكل", "noResults": "لم يتم العثور على نتائج" },
+  "search": { "title": "بحث", "placeholder": "بحث…", "stores": "المتاجر", "products": "المنتجات", "noStores": "لم يتم العثور على متاجر", "noProducts": "لم يتم العثور على منتجات" },
+  "storeView": { "products": "المنتجات", "about": "حول", "addToCart": "أضف إلى السلة", "deliveryTime": "وقت التوصيل", "minOrder": "الحد الأدنى للطلب" },
+  "cart": { "title": "سلة التسوق", "empty": "سلتك فارغة", "emptyCTA": "اكتشف متاجرنا", "subtotal": "المجموع الفرعي", "delivery": "التوصيل", "total": "المجموع", "checkout": "إتمام الطلب", "itemAdded": "تمت إضافة المنتج إلى السلة", "itemRemoved": "تم إزالة المنتج من السلة" },
+  "profile": { "title": "ملفي الشخصي", "orders": "طلباتي", "addresses": "عناويني", "logout": "تسجيل الخروج", "noOrders": "لا توجد طلبات حالياً" }
+}

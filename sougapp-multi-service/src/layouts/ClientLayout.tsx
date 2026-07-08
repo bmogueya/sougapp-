@@ -23,7 +23,7 @@ export function ClientLayout() {
       </header>
 
       {/* Zone de contenu défilante */}
-      <main className="flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-3xl lg:max-w-5xl p-4">
+      <main id="main-content" className="flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-3xl lg:max-w-5xl p-4">
         <Outlet />
       </main>
 

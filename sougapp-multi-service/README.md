@@ -141,3 +141,20 @@ npm run build   # vérifie aussi les types (tsc -b)
 ## 📱 Application mobile
 
 L'app mobile (Flutter) vit dans [`../sougapp_mobile`](../sougapp_mobile) et consomme le même backend Supabase.
+
+---
+
+## 🚢 Déploiement
+
+Voir [docs/deployment.md](docs/deployment.md)
+
+![CI](https://github.com/YOUR_USER/sougapp/actions/workflows/ci.yml/badge.svg)
+
+## 🧱 Stack finale
+
+| Domaine | Technologie |
+|---------|-------------|
+| Frontend | React 19, TypeScript 6, Vite 8, Tailwind CSS 3 |
+| Backend | Supabase (PostgreSQL + Auth + RLS) |
+| Monitoring | Sentry |
+| CI/CD | GitHub Actions + Vercel |

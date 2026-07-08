@@ -206,6 +206,7 @@ export function Promotions() {
                       <td className="px-6 py-4">
                         {banner.image_url ? (
                           <img
+                            loading="lazy"
                             src={banner.image_url}
                             alt={banner.title}
                             className="h-12 w-24 rounded-lg border border-border object-cover"

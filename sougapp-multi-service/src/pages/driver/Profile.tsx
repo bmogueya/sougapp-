@@ -3,8 +3,10 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { User, LogOut, TrendingUp, Star, Award } from 'lucide-react';
 import { formatMRU } from '../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export function DriverProfile() {
+  const { t } = useTranslation('driver');
   const { user, signOut } = useAuth();
   const [stats, setStats] = useState({ total_deliveries: 0, total_earnings: 0 });
 
@@ -75,7 +77,7 @@ export function DriverProfile() {
           className="w-full flex items-center justify-center gap-2 py-4 bg-danger/10 text-danger font-bold rounded-2xl hover:bg-danger/20 transition-colors"
         >
           <LogOut size={20} />
-          Se déconnecter
+          {t('profile.logout')}
         </button>
       </div>
 

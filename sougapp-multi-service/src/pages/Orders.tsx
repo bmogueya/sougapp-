@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { ShoppingBag } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { getOrderStatusMeta, ORDER_STATUS_TONE_CLASS } from '../lib/orderStatus';
+import { Button } from '../components/ui/Button';
+import { usePagination } from '../lib/hooks/usePagination';
 
 interface Order {
   id: string;
@@ -21,11 +23,13 @@ export default function Orders() {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const { page, total, from, to, hasMore, setTotal, nextPage, prevPage } = usePagination(20);
 
   useEffect(() => {
     fetchOrders();
+  }, [page]);
 
-    // Listen to real-time changes on the 'orders' table
+  useEffect(() => {
     const subscription = supabase
       .channel('orders-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
@@ -40,18 +44,16 @@ export default function Orders() {
 
   async function fetchOrders() {
     try {
-      // NOTE: En production, on ferait un JOIN avec auth.users pour le nom du livreur
-      // et merchants pour le nom du marchand. Pour le MVP, on fait une requête simple.
-      const { data, error } = await supabase
+      setLoading(true);
+      const { data, count, error } = await supabase
         .from('orders')
-        .select(`
-          *,
-          store:stores(name)
-        `)
-        .order('created_at', { ascending: false });
+        .select('*, store:stores(name)', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
       setOrders(data || []);
+      if (count !== null) setTotal(count);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
@@ -69,19 +71,19 @@ export default function Orders() {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-text">{t('orders')}</h1>
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
+      <h1 className="text-2xl sm:text-3xl font-bold text-text">{t('orders')}</h1>
 
       <div className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-surface-2 border-b border-border">
               <tr>
-                <th className="p-4 font-semibold text-muted">ID</th>
-                <th className="p-4 font-semibold text-muted">Date</th>
-                <th className="p-4 font-semibold text-muted">Marchand</th>
-                <th className="p-4 font-semibold text-muted">Statut</th>
-                <th className="p-4 font-semibold text-muted">Montant</th>
+                <th className="p-4 font-semibold text-muted text-xs sm:text-sm">ID</th>
+                <th className="p-4 font-semibold text-muted text-xs sm:text-sm">Date</th>
+                <th className="p-4 font-semibold text-muted text-xs sm:text-sm">Marchand</th>
+                <th className="p-4 font-semibold text-muted text-xs sm:text-sm">Statut</th>
+                <th className="p-4 font-semibold text-muted text-xs sm:text-sm">Montant</th>
               </tr>
             </thead>
             <tbody>
@@ -103,16 +105,34 @@ export default function Orders() {
               ) : (
                 orders.map((order) => (
                   <tr key={order.id} className="border-b border-border hover:bg-surface-2">
-                    <td className="p-4 font-mono text-sm">{order.id.substring(0, 8)}</td>
-                    <td className="p-4 text-muted">{new Date(order.created_at).toLocaleString()}</td>
-                    <td className="p-4 font-medium">{order.store?.name || 'Inconnu'}</td>
-                    <td className="p-4">{getStatusBadge(order.status)}</td>
-                    <td className="p-4 font-semibold">{order.total_amount} MRU</td>
+                    <td data-label="ID" className="p-4">
+                      <span className="sm:hidden text-xs text-muted font-medium block mb-1">ID</span>
+                      <span className="font-mono text-sm">{order.id.substring(0, 8)}</span>
+                    </td>
+                    <td data-label="Date" className="p-4">
+                      <span className="sm:hidden text-xs text-muted font-medium block mb-1">Date</span>
+                      <span className="text-muted">{new Date(order.created_at).toLocaleString()}</span>
+                    </td>
+                    <td data-label="Marchand" className="p-4">
+                      <span className="sm:hidden text-xs text-muted font-medium block mb-1">Marchand</span>
+                      <span className="font-medium">{order.store?.name || 'Inconnu'}</span>
+                    </td>
+                    <td data-label="Statut" className="p-4">{getStatusBadge(order.status)}</td>
+                    <td data-label="Montant" className="p-4">
+                      <span className="font-semibold">{order.total_amount} MRU</span>
+                    </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+        </div>
+        <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+          <span className="text-sm text-muted">{total} résultats</span>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={prevPage} disabled={page === 0}>Précédent</Button>
+            <Button variant="outline" size="sm" onClick={nextPage} disabled={!hasMore}>Suivant</Button>
+          </div>
         </div>
       </div>
     </div>

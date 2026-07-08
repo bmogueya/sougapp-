@@ -214,7 +214,7 @@ export function Dispatch() {
       </div>
 
       {/* ── KPI strip ── */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-4" aria-live="polite">
         {[
           { label: "En attente", value: orders.filter((o) => o.status === "pending").length, accent: "text-warning" },
           { label: "En préparation", value: orders.filter((o) => o.status === "preparing").length, accent: "text-info" },
@@ -257,7 +257,7 @@ export function Dispatch() {
             </div>
           </div>
 
-          <ul className="flex-1 divide-y divide-border overflow-y-auto">
+          <ul className="flex-1 divide-y divide-border overflow-y-auto" aria-live="polite">
             {loading ? (
               <li className="p-8 text-center text-muted">Chargement...</li>
             ) : filteredOrders.map((order) => (

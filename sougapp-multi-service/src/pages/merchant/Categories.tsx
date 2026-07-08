@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Plus, Search, Tag, Edit, Trash2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
@@ -104,9 +104,16 @@ export function MerchantCategories() {
     setCategories((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const filteredCategories = categories.filter((c) =>
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredCategories = useMemo(
+    () => categories.filter((c) =>
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
+    [categories, searchTerm],
   );
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -134,7 +141,7 @@ export function MerchantCategories() {
               type="text"
               placeholder="Rechercher une catégorie..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearchChange}
               className="w-full rounded-xl bg-bg pl-10 pr-4 py-2.5 text-sm text-text border border-border placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
             />
           </div>
@@ -165,7 +172,7 @@ export function MerchantCategories() {
                   <tr key={cat.id} className="border-b border-border transition-colors hover:bg-surface-2">
                     <td className="px-6 py-4">
                       {cat.image_url ? (
-                        <img src={cat.image_url} alt={cat.name} className="h-10 w-10 rounded-full border border-border object-cover" />
+                        <img loading="lazy" src={cat.image_url} alt={cat.name} className="h-10 w-10 rounded-full border border-border object-cover" />
                       ) : (
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
                           {cat.name.charAt(0).toUpperCase()}
