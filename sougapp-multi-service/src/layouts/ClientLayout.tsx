@@ -1,15 +1,17 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Home, Search, ShoppingCart, User } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const NAV = [
-  { to: '/app', label: 'Accueil', icon: Home },
-  { to: '/app/search', label: 'Recherche', icon: Search },
-  { to: '/app/cart', label: 'Panier', icon: ShoppingCart },
-  { to: '/app/profile', label: 'Profil', icon: User },
+  { to: '/app', labelKey: 'nav.home', icon: Home },
+  { to: '/app/search', labelKey: 'nav.search', icon: Search },
+  { to: '/app/cart', labelKey: 'nav.cart', icon: ShoppingCart },
+  { to: '/app/profile', labelKey: 'nav.profile', icon: User },
 ];
 
 export function ClientLayout() {
+  const { t } = useTranslation('client');
   const location = useLocation();
 
   const isActive = (path: string) => 
@@ -30,7 +32,7 @@ export function ClientLayout() {
       {/* Bottom Navigation Bar (Mobile First) */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-border sm:hidden shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
         <div className="flex justify-around items-center h-16">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, labelKey, icon: Icon }) => (
             <Link
               key={to}
               to={to}
@@ -40,7 +42,7 @@ export function ClientLayout() {
               )}
             >
               <Icon size={20} className={isActive(to) ? "fill-primary/20" : ""} />
-              <span className="text-[10px] font-medium">{label}</span>
+              <span className="text-[10px] font-medium">{t(labelKey)}</span>
             </Link>
           ))}
         </div>
@@ -52,7 +54,7 @@ export function ClientLayout() {
           <h1 className="text-2xl font-black text-primary">SougApp</h1>
         </div>
         <nav className="space-y-2">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, labelKey, icon: Icon }) => (
             <Link
               key={to}
               to={to}
@@ -64,7 +66,7 @@ export function ClientLayout() {
               )}
             >
               <Icon size={20} />
-              {label}
+              {t(labelKey)}
             </Link>
           ))}
         </nav>

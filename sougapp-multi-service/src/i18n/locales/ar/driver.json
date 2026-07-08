@@ -1,4 +1,5 @@
 {
+  "nav": { "missions": "المهام", "history": "السجل", "profile": "الملف الشخصي", "logout": "تسجيل الخروج" },
   "dashboard": { "title": "لوحة القيادة", "online": "متصل", "offline": "غير متصل", "missions": "المهام", "earnings": "الأرباح", "newMission": "مهمة جديدة", "accept": "قبول", "decline": "رفض", "noMissions": "لا توجد مهام حالية", "todayEarnings": "أرباح اليوم", "cashInHand": "النقود المتوفرة" },
   "history": { "title": "السجل", "completedMissions": "المهام المكتملة", "date": "التاريخ", "amount": "المبلغ", "noHistory": "لا يوجد سجل متاح" },
   "profile": { "title": "ملفي الشخصي", "name": "الاسم", "phone": "الهاتف", "zone": "المنطقة", "totalMissions": "إجمالي المهام", "rating": "التقييم", "logout": "تسجيل الخروج" }

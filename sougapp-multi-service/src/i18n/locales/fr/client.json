@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "cart": "Panier",
+    "profile": "Profil"
+  },
   "home": {
     "title": "SougApp",
     "nearbyStores": "Stores à proximité",

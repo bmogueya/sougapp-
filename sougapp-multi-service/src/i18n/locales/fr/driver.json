@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "missions": "Missions",
+    "history": "Historique",
+    "profile": "Profil",
+    "logout": "Déconnexion"
+  },
   "dashboard": {
     "title": "Tableau de bord",
     "online": "En ligne",

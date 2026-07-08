@@ -16,11 +16,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../lib/utils";
 
 const NAV = [
-  { to: "/merchant", label: "Vue d'ensemble", icon: Store },
-  { to: "/merchant/orders", label: "Commandes", icon: ShoppingBag },
-  { to: "/merchant/products", label: "Produits", icon: Package },
-  { to: "/merchant/categories", label: "Catégories", icon: Tag },
-  { to: "/merchant/settings", label: "Paramètres", icon: Settings },
+  { to: "/merchant", labelKey: "merchantNav.overview", icon: Store },
+  { to: "/merchant/orders", labelKey: "merchantNav.orders", icon: ShoppingBag },
+  { to: "/merchant/products", labelKey: "merchantNav.products", icon: Package },
+  { to: "/merchant/categories", labelKey: "merchantNav.categories", icon: Tag },
+  { to: "/merchant/settings", labelKey: "merchantNav.settings", icon: Settings },
 ];
 
 export function MerchantLayout() {
@@ -73,7 +73,7 @@ export function MerchantLayout() {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, labelKey, icon: Icon }) => (
             <Link
               key={to}
               to={to}
@@ -86,7 +86,7 @@ export function MerchantLayout() {
               )}
             >
               <Icon size={18} />
-              {label}
+              {t(labelKey)}
             </Link>
           ))}
         </nav>

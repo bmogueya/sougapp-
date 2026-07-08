@@ -28,6 +28,13 @@ const translationFr = {
   "language": "Langue",
   "preferences": "Préférences",
   "theme": "Thème",
+  "merchantNav": {
+    "overview": "Vue d'ensemble",
+    "orders": "Commandes",
+    "products": "Produits",
+    "categories": "Catégories",
+    "settings": "Paramètres"
+  },
   "welcome": "Bienvenue sur SougApp",
   "analytics": {
     "paymentMethods": "Paiements",
@@ -107,6 +114,13 @@ const translationEn = {
   "language": "Language",
   "preferences": "Preferences",
   "theme": "Theme",
+  "merchantNav": {
+    "overview": "Overview",
+    "orders": "Orders",
+    "products": "Products",
+    "categories": "Categories",
+    "settings": "Settings"
+  },
   "welcome": "Welcome to SougApp",
   "analytics": {
     "paymentMethods": "Payments",
@@ -186,6 +200,13 @@ const translationAr = {
   "language": "اللغة",
   "preferences": "التفضيلات",
   "theme": "المظهر",
+  "merchantNav": {
+    "overview": "نظرة عامة",
+    "orders": "الطلبات",
+    "products": "المنتجات",
+    "categories": "التصنيفات",
+    "settings": "الإعدادات"
+  },
   "welcome": "مرحبًا بكم في سوق آب",
   "analytics": {
     "paymentMethods": "طرق الدفع",

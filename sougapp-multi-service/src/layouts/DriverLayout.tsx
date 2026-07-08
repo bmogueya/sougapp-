@@ -2,14 +2,16 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Map, Clock, User, LogOut } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const NAV = [
-  { to: '/driver', label: 'Missions', icon: Map },
-  { to: '/driver/history', label: 'Historique', icon: Clock },
-  { to: '/driver/profile', label: 'Profil', icon: User },
+  { to: '/driver', labelKey: 'nav.missions', icon: Map },
+  { to: '/driver/history', labelKey: 'nav.history', icon: Clock },
+  { to: '/driver/profile', labelKey: 'nav.profile', icon: User },
 ];
 
 export function DriverLayout() {
+  const { t } = useTranslation('driver');
   const location = useLocation();
   const { signOut } = useAuth();
 
@@ -37,7 +39,7 @@ export function DriverLayout() {
       {/* Bottom Navigation Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-border sm:hidden shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
         <div className="flex justify-around items-center h-16">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, labelKey, icon: Icon }) => (
             <Link
               key={to}
               to={to}
@@ -47,7 +49,7 @@ export function DriverLayout() {
               )}
             >
               <Icon size={22} className={isActive(to) ? "fill-primary/20" : ""} />
-              <span className="text-[10px] font-bold">{label}</span>
+              <span className="text-[10px] font-bold">{t(labelKey)}</span>
             </Link>
           ))}
         </div>
@@ -59,7 +61,7 @@ export function DriverLayout() {
           <h1 className="text-2xl font-black text-primary">Driver Portal</h1>
         </div>
         <nav className="space-y-2 flex-1">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, labelKey, icon: Icon }) => (
             <Link
               key={to}
               to={to}
@@ -71,7 +73,7 @@ export function DriverLayout() {
               )}
             >
               <Icon size={20} />
-              {label}
+              {t(labelKey)}
             </Link>
           ))}
         </nav>
@@ -81,7 +83,7 @@ export function DriverLayout() {
             className="flex items-center gap-3 w-full px-4 py-3 text-danger hover:bg-danger/10 rounded-xl transition-colors font-medium text-sm"
           >
             <LogOut size={20} />
-            Déconnexion
+            {t('nav.logout')}
           </button>
         </div>
       </aside>
