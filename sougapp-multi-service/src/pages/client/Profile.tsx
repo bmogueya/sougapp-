@@ -5,6 +5,7 @@ import { User, LogOut, Package, Store } from 'lucide-react';
 import { formatMRU, cn } from '../../lib/utils';
 import { getOrderStatusMeta, ORDER_STATUS_TONE_CLASS } from '../../lib/orderStatus';
 import { useTranslation } from 'react-i18next';
+import { PreferencesCard } from '../../components/PreferencesCard';
 
 export function ClientProfile() {
   const { t } = useTranslation('client');
@@ -100,6 +101,9 @@ export function ClientProfile() {
           </div>
         )}
       </div>
+
+      {/* Préférences */}
+      <PreferencesCard />
 
       {/* Actions */}
       <div className="pt-4">

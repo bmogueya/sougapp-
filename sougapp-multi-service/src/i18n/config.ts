@@ -26,6 +26,8 @@ const translationFr = {
   "modules_nav": "Modules",
   "logout": "Déconnexion",
   "language": "Langue",
+  "preferences": "Préférences",
+  "theme": "Thème",
   "welcome": "Bienvenue sur SougApp",
   "analytics": {
     "paymentMethods": "Paiements",
@@ -103,6 +105,8 @@ const translationEn = {
   "modules_nav": "Modules",
   "logout": "Logout",
   "language": "Language",
+  "preferences": "Preferences",
+  "theme": "Theme",
   "welcome": "Welcome to SougApp",
   "analytics": {
     "paymentMethods": "Payments",
@@ -180,6 +184,8 @@ const translationAr = {
   "modules_nav": "الوحدات",
   "logout": "تسجيل الخروج",
   "language": "اللغة",
+  "preferences": "التفضيلات",
+  "theme": "المظهر",
   "welcome": "مرحبًا بكم في سوق آب",
   "analytics": {
     "paymentMethods": "طرق الدفع",

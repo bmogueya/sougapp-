@@ -1,8 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -10,15 +11,8 @@ interface HeaderProps {
 }
 
 const Header = memo(function Header({ onMenuClick, sidebarOpen }: HeaderProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { signOut } = useAuth();
-
-  // La persistance + l'application de `dir`/`lang` sont centralisées dans
-  // `i18n/config.ts` (listener `languageChanged`), donc valables pour tous
-  // les rôles. Ici on ne fait que déclencher le changement.
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
 
   return (
     <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 sticky top-0 z-10">
@@ -40,19 +34,8 @@ const Header = memo(function Header({ onMenuClick, sidebarOpen }: HeaderProps) {
       <div className="flex items-center gap-6">
         <ThemeToggle />
 
-        <div className="flex items-center gap-2">
-          <Globe size={18} className="text-muted" />
-          <select 
-            className="border-none bg-transparent text-sm text-text focus:ring-0 cursor-pointer"
-            value={i18n.language}
-            onChange={(e) => changeLanguage(e.target.value)}
-          >
-            <option value="fr">Français</option>
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-          </select>
-        </div>
-        
+        <LanguageSwitcher />
+
         <button 
           onClick={signOut}
           className="flex items-center gap-2 text-danger hover:text-danger text-sm font-medium"

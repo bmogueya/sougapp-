@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { User, LogOut, TrendingUp, Star, Award } from 'lucide-react';
 import { formatMRU } from '../../lib/utils';
 import { useTranslation } from 'react-i18next';
+import { PreferencesCard } from '../../components/PreferencesCard';
 
 export function DriverProfile() {
   const { t } = useTranslation('driver');
@@ -69,6 +70,9 @@ export function DriverProfile() {
           <p className="text-xl font-bold text-text">{stats.total_deliveries}</p>
         </div>
       </div>
+
+      {/* Préférences */}
+      <PreferencesCard />
 
       {/* Actions */}
       <div className="pt-8">
