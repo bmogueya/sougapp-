@@ -106,10 +106,10 @@ drop policy if exists profiles_admin_all   on public.profiles;
 drop policy if exists profiles_select_own  on public.profiles;
 drop policy if exists profiles_update_own  on public.profiles;
 create policy profiles_admin_all  on public.profiles for all
-  using (public.is_admin()) with check (public.is_admin());
-create policy profiles_select_own on public.profiles for select using (auth.uid() = id);
+  using ((select public.is_admin())) with check ((select public.is_admin()));
+create policy profiles_select_own on public.profiles for select using ((select auth.uid()) = id);
 create policy profiles_update_own on public.profiles for update
-  using (auth.uid() = id) with check (auth.uid() = id);
+  using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
 
 -- =============================================================================
 -- 3. ZONES  (id = serial, le code utilise id:number)
@@ -127,7 +127,7 @@ drop policy if exists zones_public_read on public.zones;
 drop policy if exists zones_admin_all   on public.zones;
 create policy zones_public_read on public.zones for select using (status = 'active');
 create policy zones_admin_all   on public.zones for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 4. MODULES  (id = text : 'food', 'grocery', …)
@@ -148,7 +148,7 @@ drop policy if exists modules_public_read on public.modules;
 drop policy if exists modules_admin_all   on public.modules;
 create policy modules_public_read on public.modules for select using (is_active = true);
 create policy modules_admin_all   on public.modules for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 insert into public.modules (id, name, description, is_active, icon_name, theme_color) values
   ('food',     'Food Delivery',    'Livraison de repas depuis les restaurants', true,  'Utensils',     'bg-orange-500'),
@@ -192,9 +192,9 @@ drop policy if exists stores_owner_manage   on public.stores;
 drop policy if exists stores_admin_all       on public.stores;
 create policy stores_public_read on public.stores for select using (is_open = true);
 create policy stores_owner_manage on public.stores for all
-  using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+  using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()));
 create policy stores_admin_all on public.stores for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 6. CATEGORIES  (superset : store_id + sort_order pour le client ;
@@ -220,23 +220,23 @@ create policy categories_public_read on public.categories for select using (is_a
 -- Marchand : gère les catégories de ses propres boutiques
 create policy categories_merchant_manage on public.categories FOR ALL
   USING (
-    public.get_my_role() = 'merchant'
+    (select public.get_my_role()) = 'merchant'
     AND EXISTS (
       SELECT 1 FROM public.stores
       WHERE stores.id = categories.store_id
-        AND stores.owner_id = auth.uid()
+        AND stores.owner_id = (select auth.uid())
     )
   )
   WITH CHECK (
-    public.get_my_role() = 'merchant'
+    (select public.get_my_role()) = 'merchant'
     AND EXISTS (
       SELECT 1 FROM public.stores
       WHERE stores.id = categories.store_id
-        AND stores.owner_id = auth.uid()
+        AND stores.owner_id = (select auth.uid())
     )
   );
 create policy categories_admin_all on public.categories for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 7. PRODUCTS  (superset : merchant_id [panel marchand] + store_id [client])
@@ -266,11 +266,11 @@ drop policy if exists products_public_read  on public.products;
 drop policy if exists products_owner_manage  on public.products;
 drop policy if exists products_admin_all      on public.products;
 create policy products_public_read on public.products for select using (is_active = true);
--- Le marchand gère SES produits (le panel filtre merchant_id = auth.uid()).
+-- Le marchand gère SES produits (le panel filtre merchant_id = (select auth.uid())).
 create policy products_owner_manage on public.products for all
-  using (merchant_id = auth.uid()) with check (merchant_id = auth.uid());
+  using (merchant_id = (select auth.uid())) with check (merchant_id = (select auth.uid()));
 create policy products_admin_all on public.products for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 8. ORDERS  (modèle `store_id` du code ; merchant_id conservé pour la page
@@ -311,24 +311,24 @@ drop policy if exists orders_store_update    on public.orders;
 drop policy if exists orders_driver_select   on public.orders;
 drop policy if exists orders_driver_update   on public.orders;
 create policy orders_admin_all on public.orders for all
-  using (public.is_admin()) with check (public.is_admin());
-create policy orders_customer_select on public.orders for select using (auth.uid() = customer_id);
-create policy orders_customer_insert on public.orders for insert with check (auth.uid() = customer_id);
+  using ((select public.is_admin())) with check ((select public.is_admin()));
+create policy orders_customer_select on public.orders for select using ((select auth.uid()) = customer_id);
+create policy orders_customer_insert on public.orders for insert with check ((select auth.uid()) = customer_id);
 -- Marchand : commandes de SES boutiques
 create policy orders_store_select on public.orders for select using (
-  store_id in (select id from public.stores where owner_id = auth.uid()));
+  store_id in (select id from public.stores where owner_id = (select auth.uid())));
 create policy orders_store_update on public.orders for update using (
-  store_id in (select id from public.stores where owner_id = auth.uid())
+  store_id in (select id from public.stores where owner_id = (select auth.uid()))
 ) with check (
-  store_id in (select id from public.stores where owner_id = auth.uid()));
+  store_id in (select id from public.stores where owner_id = (select auth.uid())));
 -- Livreur : courses prêtes non assignées + les siennes
 create policy orders_driver_select on public.orders for select using (
-  public.get_my_role() = 'driver'
-  and (driver_id = auth.uid() or (driver_id is null and status = 'ready_for_delivery')));
+  (select public.get_my_role()) = 'driver'
+  and (driver_id = (select auth.uid()) or (driver_id is null and status = 'ready_for_delivery')));
 create policy orders_driver_update on public.orders for update using (
-  public.get_my_role() = 'driver'
-  and (driver_id = auth.uid() or (driver_id is null and status = 'ready_for_delivery'))
-) with check (public.get_my_role() = 'driver' and driver_id = auth.uid());
+  (select public.get_my_role()) = 'driver'
+  and (driver_id = (select auth.uid()) or (driver_id is null and status = 'ready_for_delivery'))
+) with check ((select public.get_my_role()) = 'driver' and driver_id = (select auth.uid()));
 
 -- =============================================================================
 -- 9. ORDER_ITEMS  (pas encore utilisé par le front, inclus pour l'intégrité)
@@ -349,7 +349,7 @@ drop policy if exists order_items_admin_all       on public.order_items;
 drop policy if exists order_items_select_visible  on public.order_items;
 drop policy if exists order_items_customer_insert  on public.order_items;
 create policy order_items_admin_all on public.order_items for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 -- Visible uniquement pour les commandes que la RLS de `orders` laisse voir.
 create policy order_items_select_visible on public.order_items for select
   USING (
@@ -357,15 +357,15 @@ create policy order_items_select_visible on public.order_items for select
       SELECT 1 FROM public.orders
       WHERE orders.id = order_items.order_id
         AND (
-          orders.customer_id = auth.uid()
-          OR public.is_admin()
-          OR orders.store_id IN (SELECT id FROM public.stores WHERE owner_id = auth.uid())
-          OR orders.driver_id = auth.uid()
+          orders.customer_id = (select auth.uid())
+          OR (select public.is_admin())
+          OR orders.store_id IN (SELECT id FROM public.stores WHERE owner_id = (select auth.uid()))
+          OR orders.driver_id = (select auth.uid())
         )
     )
   );
 create policy order_items_customer_insert on public.order_items for insert with check (
-  order_id in (select id from public.orders where customer_id = auth.uid()));
+  order_id in (select id from public.orders where customer_id = (select auth.uid())));
 
 -- =============================================================================
 -- 10. WALLETS + TRANSACTIONS  (portefeuilles MRU)
@@ -382,9 +382,9 @@ alter table public.wallets enable row level security;
 
 drop policy if exists wallets_select_own on public.wallets;
 drop policy if exists wallets_admin_all  on public.wallets;
-create policy wallets_select_own on public.wallets for select using (profile_id = auth.uid());
+create policy wallets_select_own on public.wallets for select using (profile_id = (select auth.uid()));
 create policy wallets_admin_all  on public.wallets for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- Portefeuille auto pour chaque nouveau profil
 create or replace function public.handle_new_wallet()
@@ -418,9 +418,9 @@ alter table public.transactions enable row level security;
 drop policy if exists transactions_select_own on public.transactions;
 drop policy if exists transactions_admin_all  on public.transactions;
 create policy transactions_select_own on public.transactions for select using (
-  wallet_id in (select id from public.wallets where profile_id = auth.uid()));
+  wallet_id in (select id from public.wallets where profile_id = (select auth.uid())));
 create policy transactions_admin_all on public.transactions for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 11. PROMOTIONS : BANNERS + COUPONS
@@ -445,7 +445,7 @@ create policy banners_public_read on public.banners for select using (
   and (start_date is null or start_date <= now())
   and (end_date   is null or end_date   >= now()));
 create policy banners_admin_all on public.banners for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 create table if not exists public.coupons (
   id uuid primary key default uuid_generate_v4(),
@@ -468,7 +468,7 @@ drop policy if exists coupons_public_read on public.coupons;
 drop policy if exists coupons_admin_all   on public.coupons;
 create policy coupons_public_read on public.coupons for select using (is_active = true);
 create policy coupons_admin_all on public.coupons for all
-  using (public.is_admin()) with check (public.is_admin());
+  using ((select public.is_admin())) with check ((select public.is_admin()));
 
 -- =============================================================================
 -- 13. ADDITIONAL INDEXES (Sprint 3 — performance)
