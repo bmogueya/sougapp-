@@ -482,6 +482,27 @@ CREATE INDEX IF NOT EXISTS idx_products_name ON public.products(name);
 CREATE INDEX IF NOT EXISTS idx_banners_active ON public.banners(is_active);
 CREATE INDEX IF NOT EXISTS idx_coupons_code ON public.coupons(code);
 
+-- Index de couverture des clés étrangères (advisor: unindexed_foreign_keys).
+-- Accélèrent les jointures, les vérifications de cascade ON DELETE, et les
+-- policies RLS qui filtrent par owner_id / store_id.
+CREATE INDEX IF NOT EXISTS idx_stores_owner_id       ON public.stores(owner_id);
+CREATE INDEX IF NOT EXISTS idx_stores_module_id      ON public.stores(module_id);
+CREATE INDEX IF NOT EXISTS idx_categories_store_id   ON public.categories(store_id);
+CREATE INDEX IF NOT EXISTS idx_categories_module_id  ON public.categories(module_id);
+CREATE INDEX IF NOT EXISTS idx_products_store_id     ON public.products(store_id);
+CREATE INDEX IF NOT EXISTS idx_products_merchant_id  ON public.products(merchant_id);
+CREATE INDEX IF NOT EXISTS idx_products_category_id  ON public.products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_module_id    ON public.products(module_id);
+CREATE INDEX IF NOT EXISTS idx_orders_customer_id    ON public.orders(customer_id);
+CREATE INDEX IF NOT EXISTS idx_orders_store_id       ON public.orders(store_id);
+CREATE INDEX IF NOT EXISTS idx_orders_merchant_id    ON public.orders(merchant_id);
+CREATE INDEX IF NOT EXISTS idx_orders_driver_id      ON public.orders(driver_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id  ON public.order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON public.order_items(product_id);
+CREATE INDEX IF NOT EXISTS idx_transactions_wallet_id ON public.transactions(wallet_id);
+CREATE INDEX IF NOT EXISTS idx_banners_module_id     ON public.banners(module_id);
+CREATE INDEX IF NOT EXISTS idx_coupons_module_id     ON public.coupons(module_id);
+
 -- =============================================================================
 -- 14. FULL-TEXT SEARCH (Sprint 3 — products)
 -- =============================================================================
