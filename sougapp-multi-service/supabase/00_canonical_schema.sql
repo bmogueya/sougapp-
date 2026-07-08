@@ -97,6 +97,11 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users for each row execute procedure public.handle_new_user();
 
+-- Durcissement : fonction invoquée UNIQUEMENT par son trigger (le trigger
+-- s'exécute avec les droits du définisseur, indépendamment de ce GRANT).
+-- Aucun client n'a besoin de l'exécuter directement.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
 drop policy if exists profiles_admin_all   on public.profiles;
 drop policy if exists profiles_select_own  on public.profiles;
 drop policy if exists profiles_update_own  on public.profiles;
@@ -212,9 +217,24 @@ drop policy if exists categories_public_read     on public.categories;
 drop policy if exists categories_merchant_manage on public.categories;
 drop policy if exists categories_admin_all       on public.categories;
 create policy categories_public_read on public.categories for select using (is_active = true);
--- Marchand : gère les catégories (le panel ne relie pas encore par store_id — voir DETTE)
-create policy categories_merchant_manage on public.categories for all
-  using (public.get_my_role() = 'merchant') with check (public.get_my_role() = 'merchant');
+-- Marchand : gère les catégories de ses propres boutiques
+create policy categories_merchant_manage on public.categories FOR ALL
+  USING (
+    public.get_my_role() = 'merchant'
+    AND EXISTS (
+      SELECT 1 FROM public.stores
+      WHERE stores.id = categories.store_id
+        AND stores.owner_id = auth.uid()
+    )
+  )
+  WITH CHECK (
+    public.get_my_role() = 'merchant'
+    AND EXISTS (
+      SELECT 1 FROM public.stores
+      WHERE stores.id = categories.store_id
+        AND stores.owner_id = auth.uid()
+    )
+  );
 create policy categories_admin_all on public.categories for all
   using (public.is_admin()) with check (public.is_admin());
 
@@ -331,8 +351,19 @@ drop policy if exists order_items_customer_insert  on public.order_items;
 create policy order_items_admin_all on public.order_items for all
   using (public.is_admin()) with check (public.is_admin());
 -- Visible uniquement pour les commandes que la RLS de `orders` laisse voir.
-create policy order_items_select_visible on public.order_items for select using (
-  order_id in (select id from public.orders));
+create policy order_items_select_visible on public.order_items for select
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.orders
+      WHERE orders.id = order_items.order_id
+        AND (
+          orders.customer_id = auth.uid()
+          OR public.is_admin()
+          OR orders.store_id IN (SELECT id FROM public.stores WHERE owner_id = auth.uid())
+          OR orders.driver_id = auth.uid()
+        )
+    )
+  );
 create policy order_items_customer_insert on public.order_items for insert with check (
   order_id in (select id from public.orders where customer_id = auth.uid()));
 
@@ -367,6 +398,9 @@ end; $$;
 drop trigger if exists on_profile_created on public.profiles;
 create trigger on_profile_created
   after insert on public.profiles for each row execute procedure public.handle_new_wallet();
+
+-- Durcissement : idem, fonction invoquée uniquement par son trigger.
+revoke execute on function public.handle_new_wallet() from public, anon, authenticated;
 
 create table if not exists public.transactions (
   id uuid primary key default uuid_generate_v4(),
@@ -437,7 +471,57 @@ create policy coupons_admin_all on public.coupons for all
   using (public.is_admin()) with check (public.is_admin());
 
 -- =============================================================================
--- 12. REALTIME  (orders + stores) — idempotent
+-- 13. ADDITIONAL INDEXES (Sprint 3 — performance)
+-- =============================================================================
+CREATE INDEX IF NOT EXISTS idx_profiles_role ON public.profiles(role);
+CREATE INDEX IF NOT EXISTS idx_profiles_phone ON public.profiles(phone);
+CREATE INDEX IF NOT EXISTS idx_modules_active ON public.modules(is_active);
+CREATE INDEX IF NOT EXISTS idx_stores_open ON public.stores(is_open);
+CREATE INDEX IF NOT EXISTS idx_orders_created ON public.orders(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_products_name ON public.products(name);
+CREATE INDEX IF NOT EXISTS idx_banners_active ON public.banners(is_active);
+CREATE INDEX IF NOT EXISTS idx_coupons_code ON public.coupons(code);
+
+-- =============================================================================
+-- 14. FULL-TEXT SEARCH (Sprint 3 — products)
+-- =============================================================================
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS search_vector tsvector;
+
+CREATE OR REPLACE FUNCTION public.products_search_update() RETURNS trigger AS $$
+BEGIN
+  NEW.search_vector :=
+    setweight(to_tsvector('french', coalesce(NEW.name, '')), 'A') ||
+    setweight(to_tsvector('french', coalesce(NEW.description, '')), 'B');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SET search_path = public;
+
+DROP TRIGGER IF EXISTS trg_products_search ON public.products;
+CREATE TRIGGER trg_products_search
+  BEFORE INSERT OR UPDATE ON public.products
+  FOR EACH ROW EXECUTE FUNCTION public.products_search_update();
+
+CREATE INDEX IF NOT EXISTS idx_products_search ON public.products USING GIN(search_vector);
+
+-- Backfill existing products
+UPDATE public.products SET search_vector =
+  setweight(to_tsvector('french', coalesce(name, '')), 'A') ||
+  setweight(to_tsvector('french', coalesce(description, '')), 'B');
+
+CREATE OR REPLACE FUNCTION public.search_products(query text)
+RETURNS SETOF public.products AS $$
+BEGIN
+  RETURN QUERY
+  SELECT *
+  FROM public.products
+  WHERE search_vector @@ plainto_tsquery('french', query)
+  ORDER BY ts_rank(search_vector, plainto_tsquery('french', query)) DESC
+  LIMIT 20;
+END;
+$$ LANGUAGE plpgsql STABLE SET search_path = public;
+
+-- =============================================================================
+-- 15. REALTIME  (orders + stores) — idempotent
 -- =============================================================================
 do $$ begin
   alter publication supabase_realtime add table public.orders;
