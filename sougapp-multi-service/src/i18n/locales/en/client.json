@@ -44,6 +44,8 @@
     "orders": "My orders",
     "addresses": "My addresses",
     "logout": "Logout",
-    "noOrders": "No orders yet"
+    "noOrders": "No orders yet",
+    "loading": "Loading history…",
+    "items": "{{count}} item(s)"
   }
 }

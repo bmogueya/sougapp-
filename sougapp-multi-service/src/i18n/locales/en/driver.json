@@ -32,6 +32,9 @@
     "zone": "Zone",
     "totalMissions": "Total missions",
     "rating": "Rating",
+    "totalEarnings": "Total earnings",
+    "deliveries": "Deliveries",
+    "reviews": "reviews",
     "logout": "Logout"
   }
 }

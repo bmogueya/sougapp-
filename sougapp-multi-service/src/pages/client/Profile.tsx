@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { PreferencesCard } from '../../components/PreferencesCard';
 
 export function ClientProfile() {
-  const { t } = useTranslation('client');
+  const { t, i18n } = useTranslation('client');
   const { user, signOut } = useAuth();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ export function ClientProfile() {
         </h2>
         
         {loading ? (
-          <div className="text-center py-8 text-muted">Chargement de l'historique...</div>
+          <div className="text-center py-8 text-muted">{t('profile.loading')}</div>
         ) : orders.length === 0 ? (
           <div className="text-center py-10 bg-surface rounded-3xl border border-border border-dashed">
             <Package size={40} className="mx-auto text-faint mb-3" />
@@ -74,7 +74,7 @@ export function ClientProfile() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-muted">
-                      {new Date(order.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                      {new Date(order.created_at).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}
                     </span>
                     {getStatusBadge(order.status)}
                   </div>
@@ -92,7 +92,7 @@ export function ClientProfile() {
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-text text-sm truncate">{order.stores?.name}</p>
                     <p className="text-xs text-muted truncate">
-                      {order.items?.length || 0} article(s)
+                      {t('profile.items', { count: order.items?.length || 0 })}
                     </p>
                   </div>
                 </div>

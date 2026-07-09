@@ -32,6 +32,9 @@
     "zone": "Zone",
     "totalMissions": "Total missions",
     "rating": "Note",
+    "totalEarnings": "Gains totaux",
+    "deliveries": "Courses",
+    "reviews": "avis",
     "logout": "Déconnexion"
   }
 }

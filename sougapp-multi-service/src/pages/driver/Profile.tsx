@@ -49,7 +49,7 @@ export function DriverProfile() {
         <div className="flex items-center gap-1 mt-3 bg-surface-2 px-3 py-1 rounded-full">
           <Star size={14} className="text-warning fill-warning" />
           <span className="text-sm font-bold text-text">4.8</span>
-          <span className="text-xs text-muted">(124 avis)</span>
+          <span className="text-xs text-muted">(124 {t('profile.reviews')})</span>
         </div>
       </div>
 
@@ -59,14 +59,14 @@ export function DriverProfile() {
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
             <TrendingUp size={20} className="text-primary" />
           </div>
-          <p className="text-sm text-muted mb-1">Gains Totaux</p>
+          <p className="text-sm text-muted mb-1">{t('profile.totalEarnings')}</p>
           <p className="text-xl font-bold text-text">{formatMRU(stats.total_earnings)}</p>
         </div>
         <div className="bg-surface p-5 rounded-3xl border border-border">
           <div className="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center mb-3">
             <PackageIcon size={20} className="text-info" />
           </div>
-          <p className="text-sm text-muted mb-1">Courses</p>
+          <p className="text-sm text-muted mb-1">{t('profile.deliveries')}</p>
           <p className="text-xl font-bold text-text">{stats.total_deliveries}</p>
         </div>
       </div>

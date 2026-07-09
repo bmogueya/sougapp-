@@ -44,6 +44,8 @@
     "orders": "Mes commandes",
     "addresses": "Mes adresses",
     "logout": "Déconnexion",
-    "noOrders": "Aucune commande pour le moment"
+    "noOrders": "Aucune commande pour le moment",
+    "loading": "Chargement de l'historique…",
+    "items": "{{count}} article(s)"
   }
 }
